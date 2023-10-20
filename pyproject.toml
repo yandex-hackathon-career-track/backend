@@ -24,10 +24,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 target-version = ['py311']
-exclude = [
-    "*migrations/",
-    "settings.py",
-]
+exclude = 'migrations'
 line_length = 79
 
 [tool.isort]

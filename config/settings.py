@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 from pathlib import Path
 
@@ -25,6 +26,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "djoser",
+    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
@@ -99,3 +101,32 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.CustomUser"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API для сервиса подбора резюме. Команда Seven-Eleven (11)",
+    "DESCRIPTION": "Проект разработан в рамках Яндекс-Хакатона: Карьерный трекер. Резюме",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+DJOSER = {
+    "SERIALIZERS": {
+        # "user_create": "apps.users.serializers.CreateUserSerializer",
+        # "user": "apps.users.serializers.UserSerializer",
+        "current_user": "apps.api.v1.users.serializers.MeSerializer",
+    },
+    "HIDE_USERS": True,
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1 * 24 * 5),  # пока пишем код
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("JWT",),
+}

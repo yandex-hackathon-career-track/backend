@@ -66,10 +66,11 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Город"
     )
-    contacts = models.ManyToManyField(
+    contacts = models.ForeignKey(
         Contact,
+        on_delete=models.CASCADE,
         related_name="applicant",
-        verbose_name="Контакт"
+        verbose_name="Контакты",
     )
     status = models.CharField(
         max_length=20,

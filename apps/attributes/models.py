@@ -26,7 +26,7 @@ class Contact(BaseModel):
     """Контакты."""
 
     type = models.CharField("Тип контакта", choices=TypeChoices.choices)
-    value = models.CharField("Значение", max_length=20, unique=True)
+    value = models.CharField("Значение", max_length=30, unique=True)
 
     class Meta:
         verbose_name = "Контакт"

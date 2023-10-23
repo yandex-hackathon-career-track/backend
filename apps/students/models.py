@@ -126,3 +126,6 @@ class ApplicantCourse(BaseModel):
         verbose_name="Курс"
     )
     graduation_date = models.DateField("Дата окончания курса")
+
+    def __str__(self):
+        return f"{self.applicant} - {self.course} ({self.graduation_date})"

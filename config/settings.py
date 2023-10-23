@@ -31,7 +31,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "apps.users.apps.UsersConfig",
-    "apps.users.apps.EmployersConfig",
+    "apps.employers.apps.EmployersConfig",
+    "apps.vacancies.apps.VacanciesConfig",
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS

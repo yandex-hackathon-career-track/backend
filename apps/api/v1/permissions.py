@@ -1,6 +1,8 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
+from apps.employers.models import Company
 from apps.users.models import Role
+from apps.vacancies.models import Vacancy
 
 
 class IsEmployerOrReadOnly(BasePermission):
@@ -11,8 +13,12 @@ class IsEmployerOrReadOnly(BasePermission):
             and request.user.role == Role.EMPLOYER
         )
 
-    def has_object_permission(self, request, view, obj):
-        """Работодатель связан с компанией, иначе - только чтение."""
+    def has_object_permission(self, request, view, obj: Company | Vacancy):
+        """Работодатель - автор объекта, иначе - только чтение."""
+        if isinstance(obj, Company):
+            return request.method in SAFE_METHODS or (
+                request.user.employer in obj.employers
+            )
         return request.method in SAFE_METHODS or (
-            request.user.employer in obj.employers
+            request.user.employer == obj.author
         )

@@ -19,7 +19,7 @@ class BaseModel(models.Model):
 class Company(BaseModel):
     """Модель компании-работодателя."""
 
-    name = models.CharField(verbose_name="Название компании", max_length=100)
+    title = models.CharField(verbose_name="Название компании", max_length=100)
     about = models.TextField(verbose_name="О компании", max_length=1000)
     website = models.URLField(verbose_name="Ссылка на сайт")
 

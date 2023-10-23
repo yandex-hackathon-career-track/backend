@@ -3,12 +3,6 @@ from django.db import models
 from apps.core.models import BaseModel
 
 
-class TypeChoices(models.TextChoices):
-    EMAIL = "email", "email"
-    PHONE = "phone", "телефон"
-    TELEGRAM = "telegram", "telegram"
-
-
 class Direction(BaseModel):
     """Направление, должность."""
 
@@ -22,18 +16,18 @@ class Direction(BaseModel):
         return self.name
 
 
-class Contact(BaseModel):
-    """Контакты."""
+class Course(BaseModel):
+    """Курс."""
 
-    type = models.CharField("Тип контакта", choices=TypeChoices.choices)
-    value = models.CharField("Значение", max_length=30, unique=True)
+    name = models.CharField("Название", max_length=30)
+    duration = models.PositiveIntegerField("Длительность курса в месяцах")
 
     class Meta:
-        verbose_name = "Контакт"
-        verbose_name_plural = "Контакты"
+        verbose_name = "Курс"
+        verbose_name_plural = "Курсы"
 
     def __str__(self):
-        return self.value
+        return f"{self.name}"
 
 
 class City(BaseModel):

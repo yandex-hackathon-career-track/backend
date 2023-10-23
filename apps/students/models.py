@@ -1,8 +1,9 @@
 import uuid
 
 from django.db import models
+from datetime import datetime
 
-from apps.attributes.models import City, Contact, Direction, Stack
+from apps.attributes.models import City, Course, Contact, Direction, Stack
 from apps.core.models import BaseModel
 from apps.users.models import CustomUser
 
@@ -42,13 +43,12 @@ class Applicant(BaseModel):
         "Фото профиля",
         upload_to="images/students/%Y/%m/%d/",
         default="images/students/default.jpg",
-        blank=True,
-        null=True
+        blank=True
     )
     first_name = models.CharField("Имя", max_length=30)
     last_name = models.CharField("Фамилия", max_length=30)
-    experience = models.PositiveIntegerField("Опыт работы, в годах")
-    age = models.PositiveIntegerField("Возраст", blank=True, null=True)
+    exp_start = models.DateField("Дата начала опыта работы", blank=True, null=True)
+    birthday = models.DateField("Дата рождения", blank=True, null=True)
     can_relocate = models.BooleanField("Релокация")
     portfolio_link = models.URLField("Ссылка на портфолио", blank=True)
     direction = models.ManyToManyField(
@@ -61,17 +61,15 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Стек"
     )
-    city = models.ManyToManyField(
+    city = models.ForeignKey(
         City,
+        on_delete=models.CASCADE,
         related_name="applicant",
         verbose_name="Город"
     )
-    contacts = models.ForeignKey(
-        Contact,
-        on_delete=models.CASCADE,
-        related_name="applicant",
-        verbose_name="Контакты",
-    )
+    phone = models.CharField("Телефон", max_length=20, blank=True, null=True)
+    email = models.EmailField("Email", max_length=255, blank=True, null=True)
+    telegram = models.URLField("Telegram", blank=True, null=True)
     status = models.CharField(
         max_length=20,
         choices=StatusChoices.choices,
@@ -88,26 +86,29 @@ class Applicant(BaseModel):
         verbose_name="Формат работы"
     )
 
+    @property
+    def experience(self):
+        if self.exp_start:
+            today = datetime.now().date()
+            return today.year - self.exp_start.year
+
+    @property
+    def age(self):
+        if self.birthday:
+            today = datetime.now().date()
+            age = (
+                today.year - self.birthday.year
+                - ((today.month, today.day)
+                < (self.birthday.month, self.birthday.day))
+            )
+            return age
+
     class Meta:
         verbose_name = "Соискатель"
         verbose_name_plural = "Соискатели"
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
-
-class Course(BaseModel):
-    """Курс."""
-
-    name = models.CharField("Название", max_length=30)
-    duration = models.PositiveIntegerField("Длительность курса в месяцах")
-
-    class Meta:
-        verbose_name = "Курс"
-        verbose_name_plural = "Курсы"
-
-    def __str__(self):
-        return f"{self.name}"
 
 
 class ApplicantCourse(BaseModel):
@@ -126,6 +127,10 @@ class ApplicantCourse(BaseModel):
         verbose_name="Курс"
     )
     graduation_date = models.DateField("Дата окончания курса")
+
+    class Meta:
+        verbose_name = "Пройденные курсы"
+        verbose_name_plural = "Пройденные курсы"
 
     def __str__(self):
         return f"{self.applicant} - {self.course} ({self.graduation_date})"

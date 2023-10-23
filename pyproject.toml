@@ -11,7 +11,12 @@ Django = "^4.2.6"
 djangorestframework = "^3.14.0"
 psycopg2-binary = "^2.9.9"
 python-dotenv = "^1.0.0"
+<<<<<<< HEAD
 isort = "^5.12.0"
+=======
+djoser = "^2.2.0"
+drf-spectacular = "^0.26.5"
+>>>>>>> develop
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.10.0"

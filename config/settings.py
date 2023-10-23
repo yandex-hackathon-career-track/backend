@@ -31,6 +31,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "apps.users.apps.UsersConfig",
+    "apps.users.apps.EmployersConfig",
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS
@@ -119,8 +120,7 @@ SPECTACULAR_SETTINGS = {
 DJOSER = {
     "SERIALIZERS": {
         # "user_create": "apps.users.serializers.CreateUserSerializer",
-        # "user": "apps.users.serializers.UserSerializer",
-        "current_user": "apps.api.v1.users.serializers.MeSerializer",
+        "current_user": "apps.api.v1.users.serializers.MeUserSerializer",
     },
     "HIDE_USERS": True,
 }

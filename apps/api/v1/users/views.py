@@ -4,8 +4,14 @@ from rest_framework.decorators import action
 
 
 class UserViewSet(DjoserViewSet):
+    """Создание пользователя/получение данных о пользователе."""
+
     @action(["get"], detail=False)
     def me(self, request, *args, **kwargs):
+        """
+        Общая информация о пользователе: id, email, role.
+        Возможные роли: соискатель, работодатель, администратор.
+        """
         self.get_object = self.get_instance
         return self.retrieve(request, *args, **kwargs)
 

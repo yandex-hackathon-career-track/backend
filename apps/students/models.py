@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from datetime import datetime
 
-from apps.attributes.models import City, Course, Contact, Direction, Stack
+from apps.attributes.models import City, Course, Direction, Stack
 from apps.core.models import BaseModel
 from apps.users.models import CustomUser
 

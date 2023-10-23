@@ -110,7 +110,7 @@ class Course(BaseModel):
 
 
 class ApplicantCourse(BaseModel):
-    """Модель для отслеживания курсов, пройденных соискателями."""
+    """Отслеживание курсов, пройденных соискателями."""
 
     applicant = models.ForeignKey(
         CustomUser,

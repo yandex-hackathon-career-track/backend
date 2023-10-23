@@ -28,17 +28,22 @@ class Applicant(BaseModel):
     """Профиль студента."""
 
     id = models.UUIDField(
-        "Уникальный id", primary_key=True, default=uuid.uuid4, editable=False
+        "Уникальный id",
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
     )
     user = models.OneToOneField(
-        CustomUser, on_delete=models.CASCADE, related_name="applicant"
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name="applicant"
     )
     photo = models.ImageField(
         "Фото профиля",
         upload_to="images/students/%Y/%m/%d/",
         default="images/students/default.jpg",
         blank=True,
-        null=True,
+        null=True
     )
     first_name = models.CharField("Имя", max_length=30)
     last_name = models.CharField("Фамилия", max_length=30)
@@ -47,31 +52,39 @@ class Applicant(BaseModel):
     can_relocate = models.BooleanField("Релокация")
     portfolio_link = models.URLField("Ссылка на портфолио", blank=True)
     direction = models.ManyToManyField(
-        Direction, related_name="applicant", verbose_name="Должность"
+        Direction,
+        related_name="applicant",
+        verbose_name="Должность"
     )
     stack = models.ManyToManyField(
-        Stack, related_name="applicant", verbose_name="Стек"
+        Stack,
+        related_name="applicant",
+        verbose_name="Стек"
     )
     city = models.ManyToManyField(
-        City, related_name="applicant", verbose_name="Город"
+        City,
+        related_name="applicant",
+        verbose_name="Город"
     )
     contacts = models.ManyToManyField(
-        Contact, related_name="applicant", verbose_name="Контакт"
+        Contact,
+        related_name="applicant",
+        verbose_name="Контакт"
     )
     status = models.CharField(
         max_length=20,
         choices=StatusChoices.choices,
-        verbose_name="Статус активности",
+        verbose_name="Статус активности"
     )
     education_level = models.CharField(
         max_length=20,
         choices=EducationChoices.choices,
-        verbose_name="Образование",
+        verbose_name="Образование"
     )
     work_format = models.CharField(
         max_length=20,
         choices=WorkFormatChoices.choices,
-        verbose_name="Формат работы",
+        verbose_name="Формат работы"
     )
 
     class Meta:
@@ -97,18 +110,18 @@ class Course(BaseModel):
 
 
 class ApplicantCourse(BaseModel):
-    """Модель для подсчета"""
+    """Модель для отслеживания курсов, пройденных соискателями."""
 
     applicant = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
         related_name="applicant_course",
-        verbose_name="Соискатель",
+        verbose_name="Соискатель"
     )
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
         related_name="applicant_course",
-        verbose_name="Курс",
+        verbose_name="Курс"
     )
     graduation_date = models.DateField("Дата окончания курса")

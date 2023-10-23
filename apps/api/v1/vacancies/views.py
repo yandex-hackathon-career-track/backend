@@ -7,10 +7,12 @@ from .serializers import VacancySerializer
 
 
 class VacancyViewset(viewsets.ModelViewSet):
+    """Просмотр, создание, изменение, удаление вакансий."""
+
     queryset = get_all_vacancies()
     serializer_class = VacancySerializer
     permission_classes = (IsEmployerOrReadOnly,)
     http_method_names = ["get", "post", "patch", "delete"]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user.employer)
+        serializer.save(creator=self.request.user.employer)

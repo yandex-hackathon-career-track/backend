@@ -20,5 +20,5 @@ class IsEmployerOrReadOnly(BasePermission):
                 request.user.employer in obj.employers
             )
         return request.method in SAFE_METHODS or (
-            request.user.employer == obj.author
+            request.user.employer == obj.creator
         )

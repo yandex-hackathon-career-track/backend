@@ -27,7 +27,7 @@ class Vacancy(BaseModel):
     id = models.UUIDField(
         "Уникальный id", primary_key=True, default=uuid.uuid4, editable=False
     )
-    author = models.ForeignKey(Employer, on_delete=models.CASCADE)
+    creator = models.ForeignKey(Employer, on_delete=models.CASCADE)
     status = models.CharField(
         verbose_name="Статус вакансии",
         max_length=10,
@@ -44,7 +44,7 @@ class Vacancy(BaseModel):
         default_related_name = "vacancies"
 
     def __str__(self) -> str:
-        return f"{self.title} для {self.author.company}"
+        return f"{self.title} для {self.creator.company}"
 
 
 class VacancyStack(BaseModel):

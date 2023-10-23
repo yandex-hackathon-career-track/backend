@@ -47,3 +47,25 @@ class Employer(BaseModel):
     class Meta:
         verbose_name = "Работодатель"
         verbose_name_plural = "Работодатели"
+
+
+class Candidates(BaseModel):
+    class Status(models.TextChoices):
+        NEW = "new", "новый"
+
+    employer = models.ForeignKey(Employer, on_delete=models.CASCADE)
+    # applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    status = models.CharField(
+        verbose_name="Статус кандидата",
+        choices=Status.choices,
+        default=Status.NEW,
+    )
+    comments = models.CharField(verbose_name="Комментарии", max_length=255)
+
+    class Meta:
+        verbose_name = "Кандидат"
+        verbose_name_plural = "Кандидаты"
+        default_related_name = "candidates"
+
+    def __str__(self) -> str:
+        return f"Кандидат self.applicant для {self.employer}"

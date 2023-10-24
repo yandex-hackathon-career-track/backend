@@ -35,10 +35,16 @@ class Employer(BaseModel):
         "Уникальный id", primary_key=True, default=uuid.uuid4, editable=False
     )
     user = models.OneToOneField(
-        CustomUser, on_delete=models.CASCADE, related_name="employer"
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name="employer",
+        verbose_name="Пользователь",
     )
     company = models.ForeignKey(
-        Company, on_delete=models.CASCADE, related_name="employers"
+        Company,
+        on_delete=models.CASCADE,
+        related_name="employers",
+        verbose_name="",
     )
     # contacts = models.OneToOneField(
     #     "Contact", on_delete=models.SET_NULL, null=True
@@ -49,7 +55,9 @@ class Employer(BaseModel):
         verbose_name_plural = "Работодатели"
 
 
-class Candidates(BaseModel):
+class Candidate(BaseModel):
+    """Модель отобранных работодателем кандидатов."""
+
     class Status(models.TextChoices):
         NEW = "new", "новый"
 
@@ -66,6 +74,12 @@ class Candidates(BaseModel):
         verbose_name = "Кандидат"
         verbose_name_plural = "Кандидаты"
         default_related_name = "candidates"
+        # constraints = (
+        #     models.UniqueConstraint(
+        #         fields=("employer", "applicant"),
+        #         name="Уникальная пара Работодатель - Соискатель",
+        #     ),
+        # )
 
     def __str__(self) -> str:
         return f"Кандидат self.applicant для {self.employer}"

@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from datetime import datetime
 
-from attributes.models import City, Course, Contact, Direction, Stack
+from attributes.models import City, Course, Contact, Direction, Stack, WorkFormat
 from core.models import BaseModel
 from users.models import CustomUser
 
@@ -17,12 +17,6 @@ class StatusChoices(models.TextChoices):
 class EducationChoices(models.TextChoices):
     MIDDLE = "middle", "среднее"
     HIGH = "high", "высшее"
-
-
-class WorkFormatChoices(models.TextChoices):
-    OFFICE = "office", "офис"
-    REMOTE = "remote", "удаленная работа"
-    HYBRID = "hybrid", "гибридный формат"
 
 
 class Applicant(BaseModel):
@@ -74,6 +68,13 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Контакт"
     )
+    work_format = models.ForeignKey(
+        WorkFormat,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="applicant",
+        verbose_name="Формат работы"
+    )
     status = models.CharField(
         max_length=20,
         choices=StatusChoices.choices,
@@ -83,11 +84,6 @@ class Applicant(BaseModel):
         max_length=20,
         choices=EducationChoices.choices,
         verbose_name="Образование"
-    )
-    work_format = models.CharField(
-        max_length=20,
-        choices=WorkFormatChoices.choices,
-        verbose_name="Формат работы"
     )
 
     @property

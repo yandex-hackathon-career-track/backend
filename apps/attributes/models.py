@@ -73,3 +73,15 @@ class Stack(BaseModel):
 
     def __str__(self):
         return self.name
+    
+
+class WorkFormat(models.Model):
+    """Формат работы."""
+    name = models.CharField("Название", max_length=30, unique=True)
+
+    class Meta:
+        verbose_name = "Формат работы"
+        verbose_name_plural = "Форматы работы" 
+
+    def __str__(self):
+        return self.name

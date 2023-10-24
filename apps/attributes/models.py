@@ -16,6 +16,23 @@ class Direction(BaseModel):
         return self.name
 
 
+class Contact(models.Model):
+    """Контакты."""
+
+    email = models.EmailField("Email", max_length=255, blank=True, null=True)
+    phone = models.CharField("Телефон", max_length=20, blank=True, null=True)
+    telegram = models.CharField(
+        "Telegram", max_length=30, blank=True, null=True
+    )
+
+    class Meta:
+        verbose_name = "Контакт"
+        verbose_name_plural = "Контакты"
+
+    def __str__(self):
+        return f"{self.email}, {self.phone}, {self.telegram}"
+
+
 class Course(BaseModel):
     """Курс."""
 

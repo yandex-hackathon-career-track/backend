@@ -3,9 +3,9 @@ import uuid
 from django.db import models
 from datetime import datetime
 
-from apps.attributes.models import City, Course, Direction, Stack
-from apps.core.models import BaseModel
-from apps.users.models import CustomUser
+from attributes.models import City, Course, Contact, Direction, Stack
+from core.models import BaseModel
+from users.models import CustomUser
 
 
 class StatusChoices(models.TextChoices):
@@ -67,9 +67,13 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Город"
     )
-    phone = models.CharField("Телефон", max_length=20, blank=True, null=True)
-    email = models.EmailField("Email", max_length=255, blank=True, null=True)
-    telegram = models.URLField("Telegram", blank=True, null=True)
+    contact = models.OneToOneField(
+        Contact,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="applicant",
+        verbose_name="Контакт"
+    )
     status = models.CharField(
         max_length=20,
         choices=StatusChoices.choices,

@@ -2,7 +2,7 @@ name: seven-eleven backend workflow
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
 
 jobs:
   build_and_push_to_docker_hub:

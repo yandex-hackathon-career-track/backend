@@ -20,9 +20,9 @@ class Contact(models.Model):
     """Контакты."""
 
     email = models.EmailField("Email", max_length=255, blank=True, null=True)
-    phone = models.CharField("Телефон", max_length=20, blank=True, null=True)
+    phone = models.CharField("Телефон", max_length=20, blank=True)
     telegram = models.CharField(
-        "Telegram", max_length=30, blank=True, null=True
+        "Telegram", max_length=30, blank=True
     )
 
     class Meta:
@@ -37,7 +37,6 @@ class Course(BaseModel):
     """Курс."""
 
     name = models.CharField("Название", max_length=30)
-    duration = models.PositiveIntegerField("Длительность курса в месяцах")
 
     class Meta:
         verbose_name = "Курс"

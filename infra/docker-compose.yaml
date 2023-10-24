@@ -10,8 +10,8 @@ services:
 
   backend:
     container_name: career_back
-    # image: ratarov/career_back:latest
-    build: ../.
+    image: ratarov/career_back:latest
+    # build: ../.
     restart: always
     volumes:
       - static_value:/app/static/

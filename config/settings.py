@@ -33,6 +33,9 @@ LOCAL_APPS = [
     "apps.users.apps.UsersConfig",
     "apps.employers.apps.EmployersConfig",
     "apps.vacancies.apps.VacanciesConfig",
+    "apps.students.apps.StudentsConfig",
+    "apps.attributes.apps.AttributesConfig",
+    "apps.core.apps.CoreConfig",
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS
@@ -97,6 +100,7 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
+
 
 STATIC_URL = "static/"
 

@@ -2,24 +2,16 @@ import uuid
 
 from django.db import models
 
+from apps.attributes.models import Contact
+from apps.core.models import BaseModel
+from apps.students.models import Applicant
 from apps.users.models import CustomUser
-
-
-# УБРАТЬ ПЕРЕД КОММИТОМ
-class BaseModel(models.Model):
-    """Базовая модель для отслеживания изменений и обновлений."""
-
-    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
-    updated_at = models.DateTimeField("Дата обновления", auto_now=True)
-
-    class Meta:
-        abstract = True
 
 
 class Company(BaseModel):
     """Модель компании-работодателя."""
 
-    title = models.CharField(verbose_name="Название компании", max_length=100)
+    name = models.CharField(verbose_name="Название компании", max_length=100)
     about = models.TextField(verbose_name="О компании", max_length=1000)
     website = models.URLField(verbose_name="Ссылка на сайт")
 
@@ -29,7 +21,7 @@ class Company(BaseModel):
 
 
 class Employer(BaseModel):
-    """Профиль работодателя."""
+    """Профиль сотрудника работодателя."""
 
     id = models.UUIDField(
         "Уникальный id", primary_key=True, default=uuid.uuid4, editable=False
@@ -44,11 +36,11 @@ class Employer(BaseModel):
         Company,
         on_delete=models.CASCADE,
         related_name="employers",
-        verbose_name="",
+        verbose_name="Компания",
     )
-    # contacts = models.OneToOneField(
-    #     "Contact", on_delete=models.SET_NULL, null=True
-    # )
+    contacts = models.OneToOneField(
+        Contact, on_delete=models.SET_NULL, null=True, verbose_name="Контакты"
+    )
 
     class Meta:
         verbose_name = "Работодатель"
@@ -61,8 +53,10 @@ class Candidate(BaseModel):
     class Status(models.TextChoices):
         NEW = "new", "новый"
 
-    employer = models.ForeignKey(Employer, on_delete=models.CASCADE)
-    # applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    employer = models.ForeignKey(
+        Employer, on_delete=models.CASCADE, verbose_name="Работодатель"
+    )
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
     status = models.CharField(
         verbose_name="Статус кандидата",
         choices=Status.choices,
@@ -74,12 +68,12 @@ class Candidate(BaseModel):
         verbose_name = "Кандидат"
         verbose_name_plural = "Кандидаты"
         default_related_name = "candidates"
-        # constraints = (
-        #     models.UniqueConstraint(
-        #         fields=("employer", "applicant"),
-        #         name="Уникальная пара Работодатель - Соискатель",
-        #     ),
-        # )
+        constraints = (
+            models.UniqueConstraint(
+                fields=("employer", "applicant"),
+                name="Уникальная пара Работодатель - Соискатель",
+            ),
+        )
 
     def __str__(self) -> str:
         return f"Кандидат self.applicant для {self.employer}"

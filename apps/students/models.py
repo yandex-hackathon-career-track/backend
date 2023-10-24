@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import models
-from datetime import datetime
+from datetime import datetime, date
 
 from attributes.models import City, Course, Contact, Direction, Stack, WorkFormat
 from core.models import BaseModel
@@ -41,14 +41,20 @@ class Applicant(BaseModel):
     )
     first_name = models.CharField("Имя", max_length=30)
     last_name = models.CharField("Фамилия", max_length=30)
-    exp_start = models.DateField("Дата начала опыта работы", blank=True, null=True)
-    birthday = models.DateField("Дата рождения", blank=True, null=True)
+    birthday = models.DateField("Дата рождения", blank=True)
     can_relocate = models.BooleanField("Релокация")
     portfolio_link = models.URLField("Ссылка на портфолио", blank=True)
-    direction = models.ManyToManyField(
+    directions = models.ManyToManyField(
         Direction,
-        related_name="applicant",
-        verbose_name="Должность"
+        through='ApplicantDirection',
+        related_name='applicants',
+        verbose_name='Должности'
+    )
+    courses = models.ManyToManyField(
+        Course,
+        through='ApplicantCourse',
+        related_name='applicants',
+        verbose_name='Пройденные курсы'
     )
     stack = models.ManyToManyField(
         Stack,
@@ -87,12 +93,6 @@ class Applicant(BaseModel):
     )
 
     @property
-    def experience(self):
-        if self.exp_start:
-            today = datetime.now().date()
-            return today.year - self.exp_start.year
-
-    @property
     def age(self):
         if self.birthday:
             today = datetime.now().date()
@@ -112,18 +112,18 @@ class Applicant(BaseModel):
 
 
 class ApplicantCourse(BaseModel):
-    """Отслеживание курсов, пройденных соискателями."""
+    """Пройденные соискателем курсы."""
 
     applicant = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        related_name="applicant_course",
+        related_name="applicant_courses",
         verbose_name="Соискатель"
     )
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
-        related_name="applicant_course",
+        related_name="applicant_courses",
         verbose_name="Курс"
     )
     graduation_date = models.DateField("Дата окончания курса")
@@ -134,3 +134,38 @@ class ApplicantCourse(BaseModel):
 
     def __str__(self):
         return f"{self.applicant} - {self.course} ({self.graduation_date})"
+
+
+class ApplicantDirection(models.Model):
+    """Опыт работы соискателя."""
+    applicant = models.ForeignKey(
+        Applicant, 
+        on_delete=models.CASCADE, 
+        related_name="applicant_directions",
+        verbose_name="Соискатель"
+    )
+    direction = models.ForeignKey(
+        Direction, 
+        on_delete=models.CASCADE,
+        related_name="applicant_directions",
+        verbose_name="Должность"
+        )
+    start_date = models.DateField("Дата начала работы")
+    end_date = models.DateField("Дата окончания работы", null=True, blank=True)
+    is_current = models.BooleanField("В настоящее время работает", default=False)
+
+    def calculate_experience(self):
+        if self.is_current:
+            today = date.today()
+            delta = today - self.start_date
+        elif self.end_date:
+            delta = self.end_date - self.start_date
+        else:
+            return 0
+
+        months = delta.days // 30
+        return months
+    
+    class Meta:
+        verbose_name = "Опыт работы"
+        verbose_name_plural = "Опыт работы"

@@ -117,13 +117,13 @@ class ApplicantCourse(BaseModel):
     applicant = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        related_name="applicant_course",
+        related_name="applicant_courses",
         verbose_name="Соискатель"
     )
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
-        related_name="applicant_course",
+        related_name="applicant_courses",
         verbose_name="Курс"
     )
     graduation_date = models.DateField("Дата окончания курса")
@@ -139,9 +139,17 @@ class ApplicantCourse(BaseModel):
 class ApplicantDirection(models.Model):
     """Опыт работы соискателя."""
     applicant = models.ForeignKey(
-        Applicant, on_delete=models.CASCADE, related_name="applicant_directions"
+        Applicant, 
+        on_delete=models.CASCADE, 
+        related_name="applicant_directions",
+        verbose_name="Соискатель"
     )
-    direction = models.ForeignKey(Direction, on_delete=models.CASCADE)
+    direction = models.ForeignKey(
+        Direction, 
+        on_delete=models.CASCADE,
+        related_name="applicant_directions",
+        verbose_name="Должность"
+        )
     start_date = models.DateField("Дата начала работы")
     end_date = models.DateField("Дата окончания работы", null=True, blank=True)
     is_current = models.BooleanField("В настоящее время работает", default=False)

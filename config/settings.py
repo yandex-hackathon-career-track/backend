@@ -12,6 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", default=get_random_secret_key())
 DEBUG = os.getenv("DEBUG", default="False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default="127.0.0.1").split(", ")
+CSRF_TRUSTED_ORIGINS = os.getenv("TRUSTED_ORIGINS", default="").split(", ")
+CORS_ALLOWED_ORIGINS = os.getenv("TRUSTED_ORIGINS", default="").split(", ")
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -27,6 +29,7 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt",
     "djoser",
     "drf_spectacular",
+    "corsheaders",
 ]
 
 LOCAL_APPS = [
@@ -39,6 +42,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

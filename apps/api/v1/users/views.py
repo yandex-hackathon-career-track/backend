@@ -1,6 +1,8 @@
 from djoser.views import UserViewSet as DjoserViewSet
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class UserViewSet(DjoserViewSet):
@@ -10,10 +12,12 @@ class UserViewSet(DjoserViewSet):
     def me(self, request, *args, **kwargs):
         """
         Общая информация о пользователе: id, email, role.
-        Возможные роли: соискатель, работодатель, администратор.
+        Возможные роли: employer/applicant/admin.
         """
-        self.get_object = self.get_instance
-        return self.retrieve(request, *args, **kwargs)
+        serializer = self.get_serializer_class()
+        return Response(
+            serializer(request.user).data, status=status.HTTP_200_OK
+        )
 
     # отключаем смену логина (email)
     @extend_schema(exclude=True)

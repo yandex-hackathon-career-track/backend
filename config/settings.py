@@ -103,6 +103,10 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+MEDIA_URL = "media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -124,7 +128,7 @@ SPECTACULAR_SETTINGS = {
 
 DJOSER = {
     "SERIALIZERS": {
-        # "user_create": "apps.users.serializers.CreateUserSerializer",
+        "user_create": "apps.api.v1.users.serializers.MyUserCreateSerializer",
         "current_user": "apps.api.v1.users.serializers.MeUserSerializer",
     },
     "HIDE_USERS": True,

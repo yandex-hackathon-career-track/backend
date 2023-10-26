@@ -16,7 +16,7 @@ class Direction(BaseModel):
         return self.name
 
 
-class Contact(models.Model):
+class Contact(BaseModel):
     """Контакты."""
 
     email = models.EmailField("Email", max_length=255, blank=True, null=True)
@@ -30,23 +30,9 @@ class Contact(models.Model):
         return f"{self.email}, {self.telegram}"
 
 
-class Course(BaseModel):
-    """Курс."""
-
-    name = models.CharField("Название", max_length=30)
-
-    class Meta:
-        verbose_name = "Курс"
-        verbose_name_plural = "Курсы"
-
-    def __str__(self):
-        return f"{self.name}"
-
-
 class City(BaseModel):
     """Город."""
-
-    name = models.CharField("Город", max_length=20, unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Город"
@@ -58,8 +44,7 @@ class City(BaseModel):
 
 class Stack(BaseModel):
     """Стек технологий."""
-
-    name = models.CharField("Стек", max_length=20, unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Cтек"
@@ -69,10 +54,9 @@ class Stack(BaseModel):
         return self.name
 
 
-class WorkFormat(models.Model):
+class WorkFormat(BaseModel):
     """Формат работы."""
-
-    name = models.CharField("Название", max_length=30, unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Формат работы"
@@ -82,51 +66,25 @@ class WorkFormat(models.Model):
         return self.name
 
 
-class PortfolioLink(models.Model):
-    """Модель для хранения ссылки на портфолио."""
+class Course(BaseModel):
+    """Опыт работы соискателя."""
+    name = models.CharField("Название", max_length=100)
 
-    name = models.CharField("Имя", max_length=30)
-    link = models.URLField("Ссылка на портфолио", blank=True)
+    direction = models.ForeignKey(
+        Direction, on_delete=models.CASCADE, related_name="course_directions"
+    )
 
     class Meta:
-        verbose_name = "Ссылка на портфолио"
-        verbose_name_plural = "Ссылка на портфолио"
+        verbose_name = "Связь курса и направления"
+        verbose_name_plural = "Связи курсов и направлений"
 
     def __str__(self):
         return self.name
 
 
-class Education(models.Model):
-    """Образование."""
-
-    name = models.CharField("Название", max_length=255)
-
-    class Meta:
-        verbose_name = "Образование"
-        verbose_name_plural = "Образование"
-
-    def __str__(self):
-        return self.name
-
-
-class Job(models.Model):
-    """Работа."""
-
-    name = models.CharField("Название", max_length=255)
-
-    class Meta:
-        verbose_name = "Работа"
-        verbose_name_plural = "Работа"
-
-    def __str__(self):
-        return self.name
-
-
-class Status(models.Model):
+class ActivityStatus(BaseModel):
     """Статус активности."""
-
-    name = models.CharField(max_length=20, verbose_name="Статус активности")
-
+    name = models.CharField("Название", max_length=100)
     class Meta:
         verbose_name = "Статус активности"
         verbose_name_plural = "Статусы активности"

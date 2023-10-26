@@ -4,14 +4,10 @@ from django.db import models
 from datetime import date
 
 from apps.attributes.models import (
+    ActivityStatus,
     City,
     Course,
     Contact,
-    Direction,
-    Education,
-    Status,
-    Job,
-    PortfolioLink,
     Stack,
     WorkFormat,
 )
@@ -37,26 +33,7 @@ class Applicant(BaseModel):
     first_name = models.CharField("Имя", max_length=30)
     last_name = models.CharField("Фамилия", max_length=30)
     can_relocate = models.BooleanField("Релокация")
-    portfolio_links = models.ManyToManyField(
-        PortfolioLink,
-        related_name="applicant",
-        verbose_name="Портфолио",
-    )
-    jobs = models.ManyToManyField(
-        Job,
-        through="ApplicantJob",
-        related_name="jobs",
-        verbose_name="Должности",
-    )
-    courses = models.ManyToManyField(
-        Course,
-        through="ApplicantCourse",
-        related_name="applicants",
-        verbose_name="Пройденные курсы",
-    )
-    stack = models.ManyToManyField(
-        Stack, related_name="applicant", verbose_name="Стек"
-    )
+    stack = models.ManyToManyField(Stack, related_name="applicant", verbose_name="Стек")
     city = models.ForeignKey(
         City,
         on_delete=models.CASCADE,
@@ -70,6 +47,13 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Контакт",
     )
+    status = models.ForeignKey(
+        ActivityStatus,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="applicant",
+        verbose_name="Статус",
+    )
     work_format = models.ForeignKey(
         WorkFormat,
         on_delete=models.SET_NULL,
@@ -77,25 +61,11 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Формат работы",
     )
-    education = models.ForeignKey(
-        Education,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="applicants",
-        verbose_name="Образование",
-    )
-    status = models.ForeignKey(
-        Status,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="status",
-        verbose_name="Статус",
-    )
 
     def calculate_total_experience(self):
         total_experience = 0
-        for applicant_job in self.applicant_jobs.all():
-            total_experience += applicant_job.experience
+        for job in self.jobs.all():
+            total_experience += job.experience
         return total_experience
 
     @property
@@ -135,26 +105,17 @@ class ApplicantCourse(BaseModel):
         return f"{self.applicant} - {self.course} ({self.graduation_date})"
 
 
-class ApplicantJob(models.Model):
-    """Опыт работы соискателя."""
-
+class Job(BaseModel):
+    name = models.CharField("Название", max_length=50)
     applicant = models.ForeignKey(
         Applicant,
         on_delete=models.CASCADE,
-        related_name="applicant_jobs",
+        related_name="jobs",
         verbose_name="Соискатель",
-    )
-    job = models.ForeignKey(
-        Job,
-        on_delete=models.CASCADE,
-        related_name="applicant_jobs",
-        verbose_name="Должность",
     )
     start_date = models.DateField("Дата начала работы")
     end_date = models.DateField("Дата окончания работы", null=True, blank=True)
-    is_current = models.BooleanField(
-        "В настоящее время работает", default=False
-    )
+    is_current = models.BooleanField("В настоящее время работает", default=False)
 
     @property
     def experience(self):
@@ -170,23 +131,47 @@ class ApplicantJob(models.Model):
         return months
 
     class Meta:
-        verbose_name = "Опыт работы"
-        verbose_name_plural = "Опыт работы"
+        verbose_name = "Работа"
+        verbose_name_plural = "Работа"
+
+    def __str__(self):
+        return self.name
 
 
-class CourseDirection(models.Model):
-    """Опыт работы соискателя."""
+class Education(BaseModel):
+    """Образование."""
 
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="course_directions"
-    )
-    direction = models.ForeignKey(
-        Direction, on_delete=models.CASCADE, related_name="course_directions"
+    name = models.CharField("Название", max_length=100)
+    applicant = models.ForeignKey(
+        Applicant,
+        on_delete=models.CASCADE,
+        related_name="educations",
+        verbose_name="Образование",
     )
 
     class Meta:
-        verbose_name = "Связь курса и направления"
-        verbose_name_plural = "Связи курсов и направлений"
+        verbose_name = "Образование"
+        verbose_name_plural = "Образование"
 
     def __str__(self):
-        return f"{self.course} - {self.direction}"
+        return self.name
+
+
+class PortfolioLink(BaseModel):
+    """Модель для хранения ссылки на портфолио."""
+
+    applicant = models.ForeignKey(
+        Applicant,
+        on_delete=models.CASCADE,
+        related_name="portfolio_links",
+        verbose_name="Ссылка на портфолио",
+    )
+    name = models.CharField("Имя", max_length=30)
+    link = models.URLField("Ссылка на портфолио", blank=True)
+
+    class Meta:
+        verbose_name = "Ссылка на портфолио"
+        verbose_name_plural = "Ссылка на портфолио"
+
+    def __str__(self):
+        return self.name

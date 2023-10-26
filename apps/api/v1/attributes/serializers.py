@@ -1,11 +1,10 @@
 from rest_framework import serializers
 
+
+from apps.students.models import PortfolioLink, Job, Education
 from apps.attributes.models import (
-    PortfolioLink,
-    Job,
     Stack,
     Contact,
-    Education,
     WorkFormat,
 )
 

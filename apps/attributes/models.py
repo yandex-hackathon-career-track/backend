@@ -4,7 +4,7 @@ from apps.core.models import BaseModel
 
 
 class Direction(BaseModel):
-    """Направление, должность."""
+    """Направление в сфере деятельности."""
 
     name = models.CharField("Название", max_length=100)
 
@@ -16,41 +16,23 @@ class Direction(BaseModel):
         return self.name
 
 
-class Contact(models.Model):
+class Contact(BaseModel):
     """Контакты."""
 
     email = models.EmailField("Email", max_length=255, blank=True, null=True)
-    phone = models.CharField("Телефон", max_length=20, blank=True)
-    telegram = models.CharField(
-        "Telegram", max_length=30, blank=True
-    )
+    telegram = models.CharField("Telegram", max_length=30, blank=True)
 
     class Meta:
         verbose_name = "Контакт"
         verbose_name_plural = "Контакты"
 
     def __str__(self):
-        return f"{self.email}, {self.phone}, {self.telegram}"
-
-
-class Course(BaseModel):
-    """Курс."""
-
-    name = models.CharField("Название", max_length=30)
-
-    class Meta:
-        verbose_name = "Курс"
-        verbose_name_plural = "Курсы"
-
-    def __str__(self):
-        return f"{self.name}"
+        return f"{self.email}, {self.telegram}"
 
 
 class City(BaseModel):
     """Город."""
-
-    name = models.CharField("Город", max_length=20, unique=True)
-    slug = models.SlugField("Слаг", unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Город"
@@ -62,9 +44,7 @@ class City(BaseModel):
 
 class Stack(BaseModel):
     """Стек технологий."""
-
-    name = models.CharField("Стек", max_length=20, unique=True)
-    slug = models.SlugField("Слаг", unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Cтек"
@@ -72,15 +52,42 @@ class Stack(BaseModel):
 
     def __str__(self):
         return self.name
-    
 
-class WorkFormat(models.Model):
+
+class WorkFormat(BaseModel):
     """Формат работы."""
-    name = models.CharField("Название", max_length=30, unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Формат работы"
-        verbose_name_plural = "Форматы работы" 
+        verbose_name_plural = "Форматы работы"
+
+    def __str__(self):
+        return self.name
+
+
+class Course(BaseModel):
+    """Опыт работы соискателя."""
+    name = models.CharField("Название", max_length=100)
+
+    direction = models.ForeignKey(
+        Direction, on_delete=models.CASCADE, related_name="course_directions"
+    )
+
+    class Meta:
+        verbose_name = "Связь курса и направления"
+        verbose_name_plural = "Связи курсов и направлений"
+
+    def __str__(self):
+        return self.name
+
+
+class ActivityStatus(BaseModel):
+    """Статус активности."""
+    name = models.CharField("Название", max_length=100)
+    class Meta:
+        verbose_name = "Статус активности"
+        verbose_name_plural = "Статусы активности"
 
     def __str__(self):
         return self.name

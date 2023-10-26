@@ -13,6 +13,7 @@ from apps.attributes.models import (
 
 
 class DirectionSerializer(serializers.ModelSerializer):
+    """Сериализатор для отображения направлений."""
     class Meta:
         model = Direction
         fields = ("id", "name")
@@ -37,7 +38,7 @@ class PortfolioLinkSerializer(serializers.ModelSerializer):
 
 
 class JobSerializer(serializers.ModelSerializer):
-    """Сериализатор для отображения направления, должности."""
+    """Сериализатор для опыта работы."""
 
     class Meta:
         model = Job
@@ -77,7 +78,7 @@ class WorkFormatSerializer(serializers.ModelSerializer):
 
 
 class ActivityStatusSerializer(serializers.ModelSerializer):
-    """Сериализатор для формата работы."""
+    """Сериализатор для статуса поиска."""
 
     class Meta:
         model = ActivityStatus

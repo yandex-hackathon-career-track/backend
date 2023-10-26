@@ -61,6 +61,7 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
 
 class ApplicantsListSerializer(serializers.ModelSerializer):
+    """Сериализатор для отображения списка соискателей."""
     status = ActivityStatusSerializer()
     stack = StackSerializer(many=True)
 

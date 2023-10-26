@@ -59,11 +59,54 @@ class Stack(BaseModel):
 class WorkFormat(BaseModel):
     """Формат работы."""
 
-    name = models.CharField("Название", max_length=30, unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Формат работы"
         verbose_name_plural = "Форматы работы"
+
+    def __str__(self):
+        return self.name
+
+
+class Course(BaseModel):
+    """Опыт работы соискателя."""
+
+    name = models.CharField("Название", max_length=100)
+
+    direction = models.ForeignKey(
+        Direction, on_delete=models.CASCADE, related_name="course_directions"
+    )
+
+    class Meta:
+        verbose_name = "Связь курса и направления"
+        verbose_name_plural = "Связи курсов и направлений"
+
+    def __str__(self):
+        return self.name
+
+
+class ActivityStatus(BaseModel):
+    """Статус активности."""
+
+    name = models.CharField("Название", max_length=100)
+
+    class Meta:
+        verbose_name = "Статус активности"
+        verbose_name_plural = "Статусы активности"
+
+    def __str__(self):
+        return self.name
+
+
+class CandidateStatus(BaseModel):
+    """Статус рассмотрения кандидата."""
+
+    name = models.CharField("Название", max_length=30, unique=True)
+
+    class Meta:
+        verbose_name = "Статус кандидата"
+        verbose_name_plural = "Статусы кандидатов"
 
     def __str__(self):
         return self.name

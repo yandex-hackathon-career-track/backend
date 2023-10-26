@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from apps.attributes.models import CandidateStatus, City, WorkFormat
+from apps.attributes.models import City, ReviewStatus, WorkFormat
 from apps.core.models import BaseModel
 from apps.employers.models import Employer
 from apps.students.models import Applicant
@@ -68,7 +68,7 @@ class Respond(BaseModel):
         Vacancy, on_delete=models.CASCADE, verbose_name="Вакансия"
     )
     status = models.ForeignKey(
-        CandidateStatus,
+        ReviewStatus,
         on_delete=models.PROTECT,
         verbose_name="Статус рассмотрения отклика",
     )

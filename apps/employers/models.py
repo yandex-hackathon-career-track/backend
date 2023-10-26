@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from apps.attributes.models import Contact, CandidateStatus
+from apps.attributes.models import Contact, ReviewStatus
 from apps.core.models import BaseModel
 from apps.students.models import Applicant
 from apps.users.models import CustomUser
@@ -47,24 +47,31 @@ class Employer(BaseModel):
         verbose_name_plural = "Работодатели"
 
 
-class Candidate(BaseModel):
-    """Модель отобранных работодателем кандидатов."""
+class SelectedResume(BaseModel):
+    """Модель отобранных работодателем соискателей."""
 
     employer = models.ForeignKey(
-        Employer, on_delete=models.CASCADE, verbose_name="Работодатель"
+        Employer,
+        on_delete=models.CASCADE,
+        verbose_name="Работодатель",
+        related_name="selected_resume",
     )
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(
+        Applicant,
+        on_delete=models.CASCADE,
+        verbose_name="Соискатель",
+        related_name="selected_by",
+    )
     status = models.ForeignKey(
-        CandidateStatus,
+        ReviewStatus,
         on_delete=models.PROTECT,
         verbose_name="Статус кандидата",
     )
     comments = models.CharField(verbose_name="Комментарии", max_length=255)
 
     class Meta:
-        verbose_name = "Кандидат"
-        verbose_name_plural = "Кандидаты"
-        default_related_name = "candidates"
+        verbose_name = "Отобранный соискатель"
+        verbose_name_plural = "Отобранные соискатели"
         constraints = (
             models.UniqueConstraint(
                 fields=("employer", "applicant"),

@@ -1,4 +1,4 @@
-from students.models import Applicant
+from apps.students.models import Applicant
 
 
 def get_all_applicants():

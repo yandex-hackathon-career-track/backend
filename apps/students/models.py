@@ -1,29 +1,22 @@
 import uuid
 
 from django.db import models
-from datetime import datetime, date
+from datetime import date
 
 from apps.attributes.models import (
     City,
     Course,
     Contact,
     Direction,
+    Education,
+    Status,
+    Job,
+    PortfolioLink,
     Stack,
     WorkFormat,
 )
 from apps.core.models import BaseModel
 from apps.users.models import CustomUser
-
-
-class StatusChoices(models.TextChoices):
-    ACTIVE = "active", "в активном поиске"
-    INACTIVE = "inactive", "не ищу работу"
-    HIRED = "hired", "устроен на работу"
-
-
-class EducationChoices(models.TextChoices):
-    MIDDLE = "middle", "среднее"
-    HIGH = "high", "высшее"
 
 
 class Applicant(BaseModel):
@@ -43,13 +36,16 @@ class Applicant(BaseModel):
     )
     first_name = models.CharField("Имя", max_length=30)
     last_name = models.CharField("Фамилия", max_length=30)
-    birthday = models.DateField("Дата рождения", blank=True)
     can_relocate = models.BooleanField("Релокация")
-    portfolio_link = models.URLField("Ссылка на портфолио", blank=True)
-    directions = models.ManyToManyField(
-        Direction,
-        through="ApplicantDirection",
-        related_name="applicants",
+    portfolio_links = models.ManyToManyField(
+        PortfolioLink,
+        related_name="applicant",
+        verbose_name="Портфолио",
+    )
+    jobs = models.ManyToManyField(
+        Job,
+        through="ApplicantJob",
+        related_name="jobs",
         verbose_name="Должности",
     )
     courses = models.ManyToManyField(
@@ -81,30 +77,30 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Формат работы",
     )
-    status = models.CharField(
-        max_length=20,
-        choices=StatusChoices.choices,
-        verbose_name="Статус активности",
-    )
-    education_level = models.CharField(
-        max_length=20,
-        choices=EducationChoices.choices,
+    education = models.ForeignKey(
+        Education,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="applicants",
         verbose_name="Образование",
     )
+    status = models.ForeignKey(
+        Status,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="status",
+        verbose_name="Статус",
+    )
+
+    def calculate_total_experience(self):
+        total_experience = 0
+        for applicant_job in self.applicant_jobs.all():
+            total_experience += applicant_job.experience
+        return total_experience
 
     @property
-    def age(self):
-        if self.birthday:
-            today = datetime.now().date()
-            age = (
-                today.year
-                - self.birthday.year
-                - (
-                    (today.month, today.day)
-                    < (self.birthday.month, self.birthday.day)
-                )
-            )
-            return age
+    def total_experience(self):
+        return self.calculate_total_experience()
 
     class Meta:
         verbose_name = "Соискатель"
@@ -139,19 +135,19 @@ class ApplicantCourse(BaseModel):
         return f"{self.applicant} - {self.course} ({self.graduation_date})"
 
 
-class ApplicantDirection(models.Model):
+class ApplicantJob(models.Model):
     """Опыт работы соискателя."""
 
     applicant = models.ForeignKey(
         Applicant,
         on_delete=models.CASCADE,
-        related_name="applicant_directions",
+        related_name="applicant_jobs",
         verbose_name="Соискатель",
     )
-    direction = models.ForeignKey(
-        Direction,
+    job = models.ForeignKey(
+        Job,
         on_delete=models.CASCADE,
-        related_name="applicant_directions",
+        related_name="applicant_jobs",
         verbose_name="Должность",
     )
     start_date = models.DateField("Дата начала работы")
@@ -160,7 +156,8 @@ class ApplicantDirection(models.Model):
         "В настоящее время работает", default=False
     )
 
-    def calculate_experience(self):
+    @property
+    def experience(self):
         if self.is_current:
             today = date.today()
             delta = today - self.start_date
@@ -175,3 +172,21 @@ class ApplicantDirection(models.Model):
     class Meta:
         verbose_name = "Опыт работы"
         verbose_name_plural = "Опыт работы"
+
+
+class CourseDirection(models.Model):
+    """Опыт работы соискателя."""
+
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="course_directions"
+    )
+    direction = models.ForeignKey(
+        Direction, on_delete=models.CASCADE, related_name="course_directions"
+    )
+
+    class Meta:
+        verbose_name = "Связь курса и направления"
+        verbose_name_plural = "Связи курсов и направлений"
+
+    def __str__(self):
+        return f"{self.course} - {self.direction}"

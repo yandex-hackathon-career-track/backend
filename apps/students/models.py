@@ -33,7 +33,9 @@ class Applicant(BaseModel):
     first_name = models.CharField("Имя", max_length=30)
     last_name = models.CharField("Фамилия", max_length=30)
     can_relocate = models.BooleanField("Релокация")
-    stack = models.ManyToManyField(Stack, related_name="applicant", verbose_name="Стек")
+    stack = models.ManyToManyField(
+        Stack, related_name="applicant", verbose_name="Стек"
+    )
     city = models.ForeignKey(
         City,
         on_delete=models.CASCADE,
@@ -106,16 +108,18 @@ class ApplicantCourse(BaseModel):
 
 
 class Job(BaseModel):
-    name = models.CharField("Название", max_length=50)
     applicant = models.ForeignKey(
         Applicant,
         on_delete=models.CASCADE,
         related_name="jobs",
         verbose_name="Соискатель",
     )
+    name = models.CharField("Название", max_length=50)
     start_date = models.DateField("Дата начала работы")
     end_date = models.DateField("Дата окончания работы", null=True, blank=True)
-    is_current = models.BooleanField("В настоящее время работает", default=False)
+    is_current = models.BooleanField(
+        "В настоящее время работает", default=False
+    )
 
     @property
     def experience(self):
@@ -141,13 +145,13 @@ class Job(BaseModel):
 class Education(BaseModel):
     """Образование."""
 
-    name = models.CharField("Название", max_length=100)
     applicant = models.ForeignKey(
         Applicant,
         on_delete=models.CASCADE,
         related_name="educations",
         verbose_name="Образование",
     )
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Образование"

@@ -5,6 +5,7 @@ from apps.api.v1.attributes.serializers import (
     JobSerializer,
     StackSerializer,
     ContactSerializer,
+    WorkFormatSerializer,
 )
 
 
@@ -24,7 +25,9 @@ class ApplicantSerializer(serializers.ModelSerializer):
     city = serializers.StringRelatedField(read_only=True)
     jobs = JobSerializer(many=True)
     stack = StackSerializer(many=True)
+    work_format = WorkFormatSerializer()
     contact = ContactSerializer()
+    courses = ApplicantCourseSerializer(many=True, read_only=True)
 
     class Meta:
         model = Applicant
@@ -40,6 +43,9 @@ class ApplicantSerializer(serializers.ModelSerializer):
             "city",
             "contact",
             "status",
+            "total_experience",
+            "work_format",
+            "courses",
         )
 
 

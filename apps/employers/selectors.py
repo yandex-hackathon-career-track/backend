@@ -1,5 +1,5 @@
-from .models import Company
+from .models import CandidateStatus
 
 
-def get_all_companies():
-    return Company.objects.all()
+def get_all_candidate_statuses():
+    return CandidateStatus.objects.all()

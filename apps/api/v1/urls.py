@@ -1,16 +1,20 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .employers.views import EmployerView
+from .employers.views import CandidateStatusViewset, EmployerView
 from .users.views import UserViewSet
-from .vacancies.views import VacancyViewset
+from .vacancies.views import RespondViewSet, VacancyViewset
 
-app_name = "users"
+app_name = "api"
 
 router = routers.DefaultRouter()
 router.register("users", UserViewSet, basename="users")
 router.register("vacancies", VacancyViewset, basename="vacancies")
-# router.register("companies", CompanyViewset, basename="companies")
+router.register(
+    "vacancies/<uuid:pk>/responds", RespondViewSet, basename="responds"
+)
+router.register("candidate_status", CandidateStatusViewset, basename="")
+
 
 urlpatterns = [
     path("auth/", include("djoser.urls.jwt")),

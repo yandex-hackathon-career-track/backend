@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from apps.attributes.models import Contact
+from apps.attributes.models import Contact, CandidateStatus
 from apps.core.models import BaseModel
 from apps.students.models import Applicant
 from apps.users.models import CustomUser
@@ -50,17 +50,14 @@ class Employer(BaseModel):
 class Candidate(BaseModel):
     """Модель отобранных работодателем кандидатов."""
 
-    class Status(models.TextChoices):
-        NEW = "new", "новый"
-
     employer = models.ForeignKey(
         Employer, on_delete=models.CASCADE, verbose_name="Работодатель"
     )
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
-    status = models.CharField(
+    status = models.ForeignKey(
+        CandidateStatus,
+        on_delete=models.PROTECT,
         verbose_name="Статус кандидата",
-        choices=Status.choices,
-        default=Status.NEW,
     )
     comments = models.CharField(verbose_name="Комментарии", max_length=255)
 
@@ -76,4 +73,4 @@ class Candidate(BaseModel):
         )
 
     def __str__(self) -> str:
-        return f"Кандидат self.applicant для {self.employer}"
+        return f"Кандидат {self.applicant} для {self.employer}"

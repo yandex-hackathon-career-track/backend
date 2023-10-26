@@ -22,3 +22,20 @@ class IsEmployerOrReadOnly(BasePermission):
         return request.method in SAFE_METHODS or (
             request.user.employer == obj.creator
         )
+
+
+class VacancyPermission(BasePermission):
+    pass
+    # def has_permission(self, request, view):
+    #     """Создание для работодателей, иначе - только чтение."""
+    #     if request.method == 'POST':
+
+    # def has_object_permission(self, request, view, obj: Company | Vacancy):
+    #     """Работодатель - автор объекта, иначе - только чтение."""
+    #     if isinstance(obj, Company):
+    #         return request.method in SAFE_METHODS or (
+    #             request.user.employer in obj.employers
+    #         )
+    #     return request.method in SAFE_METHODS or (
+    #         request.user.employer == obj.creator
+    #     )

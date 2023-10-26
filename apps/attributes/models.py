@@ -21,9 +21,7 @@ class Contact(models.Model):
 
     email = models.EmailField("Email", max_length=255, blank=True, null=True)
     phone = models.CharField("Телефон", max_length=20, blank=True)
-    telegram = models.CharField(
-        "Telegram", max_length=30, blank=True
-    )
+    telegram = models.CharField("Telegram", max_length=30, blank=True)
 
     class Meta:
         verbose_name = "Контакт"
@@ -72,15 +70,29 @@ class Stack(BaseModel):
 
     def __str__(self):
         return self.name
-    
+
 
 class WorkFormat(models.Model):
     """Формат работы."""
+
     name = models.CharField("Название", max_length=30, unique=True)
 
     class Meta:
         verbose_name = "Формат работы"
-        verbose_name_plural = "Форматы работы" 
+        verbose_name_plural = "Форматы работы"
 
     def __str__(self):
+        return self.name
+
+
+class CandidateStatus(BaseModel):
+    """Модель статусов кандидатов."""
+
+    name = models.CharField(verbose_name="Название статуса")
+
+    class Meta:
+        verbose_name = "Статус кандидата"
+        verbose_name_plural = "Статусы кандидатов"
+
+    def __str__(self) -> str:
         return self.name

@@ -37,3 +37,12 @@ class RespondPermission(BasePermission):
         return request.user.is_authenticated and user_is_vacancy_creator(
             user, vacancy_id
         )
+
+
+class IsEmployer(BasePermission):
+    def has_permission(self, request, view):
+        """Создание для работодателей, иначе - только чтение."""
+        return (
+            request.user.is_authenticated
+            and request.user.role == Role.EMPLOYER
+        )

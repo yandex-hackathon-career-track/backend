@@ -8,12 +8,15 @@ from apps.attributes.models import (
     Stack,
     Contact,
     Course,
+    ReviewStatus,
     WorkFormat,
+    City,
 )
 
 
 class DirectionSerializer(serializers.ModelSerializer):
     """Сериализатор для отображения направлений."""
+
     class Meta:
         model = Direction
         fields = ("id", "name")
@@ -82,4 +85,20 @@ class ActivityStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityStatus
+        fields = ("id", "name")
+
+
+class ReviewStatusSerializer(serializers.ModelSerializer):
+    """Сериализатор для статуса рассмотрения откликов/резюме."""
+
+    class Meta:
+        model = ReviewStatus
+        fields = ("id", "name")
+
+
+class CitySerializer(serializers.ModelSerializer):
+    """Сериализатор для городов."""
+
+    class Meta:
+        model = City
         fields = ("id", "name")

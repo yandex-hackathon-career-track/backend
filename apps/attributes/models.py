@@ -99,14 +99,14 @@ class ActivityStatus(BaseModel):
         return self.name
 
 
-class CandidateStatus(BaseModel):
-    """Статус рассмотрения кандидата."""
+class ReviewStatus(BaseModel):
+    """Статус рассмотрения кандидата/отклика."""
 
-    name = models.CharField("Название", max_length=30, unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
-        verbose_name = "Статус кандидата"
-        verbose_name_plural = "Статусы кандидатов"
+        verbose_name = "Статус рассмотрения"
+        verbose_name_plural = "Статусы рассмотрения"
 
     def __str__(self):
         return self.name

@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from apps.attributes.models import CandidateStatus
 from apps.students.models import Applicant
 from apps.vacancies.models import Vacancy, Respond
+
+from ..attributes.serializers import CitySerializer, ReviewStatusSerializer
 
 
 class BaseVacancySerializer(serializers.ModelSerializer):
@@ -57,6 +58,8 @@ class ListVacancySerializer(BaseVacancySerializer):
 class DetailVacancySerializer(BaseVacancySerializer):
     """Сериализация для 1 вакансии работодателя."""
 
+    city = CitySerializer()
+
     class Meta(BaseVacancySerializer.Meta):
         fields = BaseVacancySerializer.Meta.fields + (
             "creator",
@@ -80,12 +83,6 @@ class ApplicantInRespondSerializer(serializers.ModelSerializer):
         model = Applicant
 
 
-class StatusInResondSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ("id", "name")
-        model = CandidateStatus
-
-
 class BaseRespondSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ("id", "applicant", "status")
@@ -98,4 +95,4 @@ class UnsafeRespondSerializer(BaseRespondSerializer):
 
 class GetRespondSerializer(BaseRespondSerializer):
     applicant = ApplicantInRespondSerializer
-    status = StatusInResondSerializer
+    status = ReviewStatusSerializer

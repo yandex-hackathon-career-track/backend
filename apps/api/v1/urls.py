@@ -1,7 +1,8 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .employers.views import CandidateStatusViewset, EmployerView
+from .attributes import views
+from .employers.views import EmployerView
 from .users.views import UserViewSet
 from .vacancies.views import RespondViewSet, VacancyViewset
 
@@ -9,12 +10,15 @@ app_name = "api"
 
 router = routers.DefaultRouter()
 router.register("users", UserViewSet, basename="users")
-router.register("vacancies", VacancyViewset, basename="vacancies")
+router.register("employers/vacancies", VacancyViewset, basename="my_vacancies")
 router.register(
-    "vacancies/<uuid:pk>/responds", RespondViewSet, basename="responds"
+    "employers/vacancies/<uuid:pk>/responds",
+    RespondViewSet,
+    basename="responds",
 )
-router.register("candidate_status", CandidateStatusViewset, basename="")
-router.register("applicants", UserViewSet, basename="applicants")
+# тут что-то не так - используется Userviewset
+# router.register("applicants", UserViewSet, basename="applicants")
+router.register("review_status", views.ReviewViewset, basename="review_status")
 
 
 urlpatterns = [

@@ -25,9 +25,9 @@ class IsEmployerOrReadOnly(BasePermission):
         )
 
 
-class IsVacancyCreator(BasePermission):
+class RespondPermission(BasePermission):
     def has_permission(self, request, view):
-        """Создание для соискателей, чтение - для автора вакансии."""
+        """Создание для соискателей, чтение/изменение - для автора вакансии."""
         if request.method == "POST":
             return (
                 request.user.is_authenticated

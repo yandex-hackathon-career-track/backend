@@ -4,7 +4,7 @@ from apps.core.models import BaseModel
 
 
 class Direction(BaseModel):
-    """Направление, должность."""
+    """Направление в сфере деятельности."""
 
     name = models.CharField("Название", max_length=100)
 
@@ -16,11 +16,10 @@ class Direction(BaseModel):
         return self.name
 
 
-class Contact(models.Model):
+class Contact(BaseModel):
     """Контакты."""
 
     email = models.EmailField("Email", max_length=255, blank=True, null=True)
-    phone = models.CharField("Телефон", max_length=20, blank=True)
     telegram = models.CharField("Telegram", max_length=30, blank=True)
 
     class Meta:
@@ -28,27 +27,13 @@ class Contact(models.Model):
         verbose_name_plural = "Контакты"
 
     def __str__(self):
-        return f"{self.email}, {self.phone}, {self.telegram}"
-
-
-class Course(BaseModel):
-    """Курс."""
-
-    name = models.CharField("Название", max_length=30)
-
-    class Meta:
-        verbose_name = "Курс"
-        verbose_name_plural = "Курсы"
-
-    def __str__(self):
-        return f"{self.name}"
+        return f"{self.email}, {self.telegram}"
 
 
 class City(BaseModel):
     """Город."""
 
-    name = models.CharField("Город", max_length=20, unique=True)
-    slug = models.SlugField("Слаг", unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Город"
@@ -61,8 +46,7 @@ class City(BaseModel):
 class Stack(BaseModel):
     """Стек технологий."""
 
-    name = models.CharField("Стек", max_length=20, unique=True)
-    slug = models.SlugField("Слаг", unique=True)
+    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Cтек"
@@ -72,7 +56,7 @@ class Stack(BaseModel):
         return self.name
 
 
-class WorkFormat(models.Model):
+class WorkFormat(BaseModel):
     """Формат работы."""
 
     name = models.CharField("Название", max_length=30, unique=True)
@@ -82,17 +66,4 @@ class WorkFormat(models.Model):
         verbose_name_plural = "Форматы работы"
 
     def __str__(self):
-        return self.name
-
-
-class CandidateStatus(BaseModel):
-    """Модель статусов кандидатов."""
-
-    name = models.CharField(verbose_name="Название статуса")
-
-    class Meta:
-        verbose_name = "Статус кандидата"
-        verbose_name_plural = "Статусы кандидатов"
-
-    def __str__(self) -> str:
         return self.name

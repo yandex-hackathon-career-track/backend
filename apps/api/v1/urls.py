@@ -14,6 +14,7 @@ router.register(
     "vacancies/<uuid:pk>/responds", RespondViewSet, basename="responds"
 )
 router.register("candidate_status", CandidateStatusViewset, basename="")
+router.register("applicants", UserViewSet, basename="applicants")
 
 
 urlpatterns = [

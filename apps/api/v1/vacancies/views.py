@@ -5,7 +5,7 @@ from apps.vacancies.selectors import (
     get_vacancy_responds,
 )
 
-from ..permissions import IsEmployerOrReadOnly, VacancyPermission
+from ..permissions import IsEmployerOrReadOnly, RespondPermission
 from . import serializers as ser
 
 
@@ -34,10 +34,10 @@ class VacancyViewset(viewsets.ModelViewSet):
 
 
 class RespondViewSet(viewsets.ModelViewSet):
-    """Просмотр и изменение статуса откликов на вакансии."""
+    """Создание, просмотр и изменение откликов на вакансии."""
 
-    permission_classes = (VacancyPermission,)
-    http_method_names = ["get", "post", "patch", "delete"]
+    permission_classes = (RespondPermission,)
+    http_method_names = ["get", "post", "patch"]
 
     def get_queryset(self):
         vacancy_id = self.kwargs.get("pk")
@@ -47,3 +47,6 @@ class RespondViewSet(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return ser.GetRespondSerializer
         return ser.UnsafeRespondSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(applicant=self.request.user.applicant)

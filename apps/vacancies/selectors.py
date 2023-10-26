@@ -39,3 +39,7 @@ def get_vacancy_responds(vacancy_id: UUID) -> QuerySet:
     return vacancy.responds.select_related(
         "applicant", "applicant__contact", "status"
     )
+
+
+def user_is_vacancy_creator(user: CustomUser, vacancy_id: UUID) -> bool:
+    return Vacancy.objects.filter(creator__user=user, id=vacancy_id).exists()

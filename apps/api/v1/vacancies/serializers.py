@@ -9,15 +9,12 @@ from ..attributes.serializers import CitySerializer, ReviewStatusSerializer
 class BaseVacancySerializer(serializers.ModelSerializer):
     """Базовый сериализатор для вакансий работодателя."""
 
+    is_published = serializers.BooleanField(required=False)
+
     class Meta:
-        fields = (
-            "id",
-            "title",
-            "is_published",
-            "publish_date",
-        )
+        fields = ("id", "title", "is_published", "created_at", "updated_at")
         model = Vacancy
-        read_only_fields = ("publish_date",)
+        read_only_fields = ("created_at", "updated_at")
 
 
 class UnsafeVacancySerializer(BaseVacancySerializer):
@@ -28,14 +25,12 @@ class UnsafeVacancySerializer(BaseVacancySerializer):
     class Meta(BaseVacancySerializer.Meta):
         fields = BaseVacancySerializer.Meta.fields + (
             "attendance",
+            "occupation",
             "description",
             "min_salary",
             "max_salary",
             "city",
         )
-
-    def create(self, validated_data):
-        return super().create(validated_data)
 
 
 class ListVacancySerializer(BaseVacancySerializer):
@@ -64,6 +59,7 @@ class DetailVacancySerializer(BaseVacancySerializer):
         fields = BaseVacancySerializer.Meta.fields + (
             "creator",
             "attendance",
+            "occupation",
             "description",
             "min_salary",
             "max_salary",

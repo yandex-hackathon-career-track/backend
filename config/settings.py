@@ -121,6 +121,8 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DATE_FORMAT": "%d.%m.%Y",
+    "DATETIME_FORMAT": "%d.%m.%Y %H:%M",
 }
 
 SPECTACULAR_SETTINGS = {

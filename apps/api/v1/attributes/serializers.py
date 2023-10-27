@@ -1,17 +1,16 @@
 from rest_framework import serializers
 
-
-from apps.students.models import PortfolioLink, Job, Education
 from apps.attributes.models import (
     ActivityStatus,
-    Direction,
-    Stack,
+    City,
     Contact,
     Course,
+    Direction,
     ReviewStatus,
+    Stack,
     WorkFormat,
-    City,
 )
+from apps.students.models import Education, Job, PortfolioLink
 
 
 class DirectionSerializer(serializers.ModelSerializer):

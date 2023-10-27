@@ -4,6 +4,7 @@ from pathlib import Path
 from django.core.management.base import BaseCommand
 
 from apps.attributes.models import (
+    ActivityStatus,
     Direction,
     City,
     Course,
@@ -25,7 +26,7 @@ class Command(BaseCommand):
             ("work_formats.csv", WorkFormat),
             ("occupations.csv", Occupation),
             ("courses.csv", Course),
-            ("activity_status.csv", WorkFormat),
+            ("activity_status.csv", ActivityStatus),
             ("review_status.csv", ReviewStatus),
         )
         for file, model in FILE_HANDLE:

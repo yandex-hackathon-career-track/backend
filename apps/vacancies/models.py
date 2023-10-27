@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from apps.attributes.models import City, ReviewStatus, WorkFormat
+from apps.attributes.models import City, Occupation, ReviewStatus, WorkFormat
 from apps.core.models import BaseModel
 from apps.employers.models import Employer
 from apps.students.models import Applicant
@@ -14,17 +14,17 @@ class Vacancy(BaseModel):
     id = models.UUIDField(
         "Уникальный id", primary_key=True, default=uuid.uuid4, editable=False
     )
-    is_published = models.BooleanField(verbose_name="Опубликована")
-    publish_date = models.DateField(verbose_name="Дата публикации")
+    is_published = models.BooleanField(
+        verbose_name="Опубликована", default=True
+    )
     creator = models.ForeignKey(Employer, on_delete=models.CASCADE)
     title = models.CharField(verbose_name="Должность", max_length=50)
     attendance = models.ForeignKey(
         WorkFormat, on_delete=models.PROTECT, verbose_name="Тип"
     )
-    occupation = models.CharField(max_length=20)
-    # occupation = models.ForeignKey(
-    #     "TBD", on_delete=models.PROTECT, verbose_name="Занятость"
-    # )
+    occupation = models.ForeignKey(
+        Occupation, on_delete=models.PROTECT, verbose_name="Занятость"
+    )
     description = models.TextField(verbose_name="Описание", max_length=1000)
     min_salary = models.PositiveIntegerField()
     max_salary = models.PositiveIntegerField()

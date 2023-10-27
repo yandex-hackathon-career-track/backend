@@ -41,3 +41,12 @@ class IsEmployer(BasePermission):
             request.user.is_authenticated
             and request.user.role == Role.EMPLOYER
         )
+
+
+class IsApplicant(BasePermission):
+    def has_permission(self, request, view):
+        """Только для пользователей-соискателей."""
+        return (
+            request.user.is_authenticated
+            and request.user.role == Role.APPLICANT
+        )

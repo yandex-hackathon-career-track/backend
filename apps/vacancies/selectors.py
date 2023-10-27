@@ -3,9 +3,10 @@ from uuid import UUID
 from django.db.models import QuerySet, Value
 from django.shortcuts import get_object_or_404
 
+from apps.employers.models import Employer
 from apps.users.models import CustomUser
 
-from .models import Vacancy
+from .models import Respond, Vacancy
 
 
 def add_all_associated_tables(queryset: QuerySet) -> QuerySet:
@@ -33,6 +34,13 @@ def get_employer_vacancies_by_user(user: CustomUser, action: str) -> QuerySet:
     return vacancies
 
 
+def get_published_vacancies() -> QuerySet:
+    """Выгрузка всех вакансий на сайте."""
+    return Vacancy.objects.filter(is_published=True).select_related(
+        "city", "attendance", "occupation", "creator"
+    )
+
+
 def get_vacancy_responds(vacancy_id: UUID) -> QuerySet:
     """Выгрузка всех откликов на вакансию."""
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
@@ -42,4 +50,23 @@ def get_vacancy_responds(vacancy_id: UUID) -> QuerySet:
 
 
 def user_is_vacancy_creator(user: CustomUser, vacancy_id: UUID) -> bool:
+    """Проверка, что пользователь - создатель вакансии"""
     return Vacancy.objects.filter(creator__user=user, id=vacancy_id).exists()
+
+
+def same_titled_vacancy_exists(
+    title: str, employer: Employer, instance: Vacancy | None
+) -> bool:
+    """Проверка, что у работодателя есть активная вакансия на эту должность."""
+    vacancy = Vacancy.objects.filter(
+        title=title, creator=employer, is_published=True
+    )
+    if instance:
+        vacancy.exclude(pk=instance.pk)
+    return vacancy.exists()
+
+
+def already_responded(vacancy_id: int, applicant) -> bool:
+    return Respond.objects.filter(
+        vacancy_id=vacancy_id, applicant=applicant
+    ).exists()

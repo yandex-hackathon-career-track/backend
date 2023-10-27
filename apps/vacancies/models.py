@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 
 from apps.attributes.models import City, Occupation, ReviewStatus, WorkFormat
+from apps.core.constants import UNCHOSEN_STATUS_ID
 from apps.core.models import BaseModel
 from apps.employers.models import Employer
 from apps.students.models import Applicant
@@ -71,6 +72,7 @@ class Respond(BaseModel):
         ReviewStatus,
         on_delete=models.PROTECT,
         verbose_name="Статус рассмотрения отклика",
+        default=UNCHOSEN_STATUS_ID,
     )
 
     class Meta:

@@ -2,26 +2,14 @@ import uuid
 
 from django.db import models
 
-from apps.attributes.models import Contact, ReviewStatus
+from apps.attributes.models import ReviewStatus
 from apps.core.models import BaseModel
 from apps.students.models import Applicant
 from apps.users.models import CustomUser
 
 
-class Company(BaseModel):
-    """Модель компании-работодателя."""
-
-    name = models.CharField(verbose_name="Название компании", max_length=100)
-    about = models.TextField(verbose_name="О компании", max_length=1000)
-    website = models.URLField(verbose_name="Ссылка на сайт")
-
-    class Meta:
-        verbose_name = "Компания"
-        verbose_name_plural = "Компании"
-
-
 class Employer(BaseModel):
-    """Профиль сотрудника работодателя."""
+    """Профиль работодателя."""
 
     id = models.UUIDField(
         "Уникальный id", primary_key=True, default=uuid.uuid4, editable=False
@@ -32,14 +20,19 @@ class Employer(BaseModel):
         related_name="employer",
         verbose_name="Пользователь",
     )
-    company = models.ForeignKey(
-        Company,
-        on_delete=models.CASCADE,
-        related_name="employers",
-        verbose_name="Компания",
+    name = models.CharField(
+        verbose_name="Название компании", max_length=100, blank=True
     )
-    contacts = models.OneToOneField(
-        Contact, on_delete=models.SET_NULL, null=True, verbose_name="Контакты"
+    about = models.TextField(
+        verbose_name="О компании", max_length=1000, blank=True
+    )
+    website = models.URLField(verbose_name="Ссылка на сайт", blank=True)
+    phone = models.CharField(
+        verbose_name="Номер телефона", max_length=20, blank=True
+    )
+    email = models.EmailField(verbose_name="Контактный email", blank=True)
+    activity = models.CharField(
+        verbose_name="Сфера деятельности", max_length=255, blank=True
     )
 
     class Meta:

@@ -10,7 +10,7 @@ from .models import Vacancy
 
 def add_all_associated_tables(queryset: QuerySet) -> QuerySet:
     """Загрузка сопутствующих таблиц."""
-    return queryset.select_related("city", "creator", "creator__company")
+    return queryset.select_related("city", "creator")
 
 
 def add_annotation(queryset: QuerySet) -> QuerySet:

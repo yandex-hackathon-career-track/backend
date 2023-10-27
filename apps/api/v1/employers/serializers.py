@@ -1,19 +1,19 @@
 from rest_framework import serializers
 
-from apps.employers.models import Company, Employer
-
-
-class CompanySerializer(serializers.ModelSerializer):
-    """Сериализация данных для Компании."""
-
-    class Meta:
-        fields = ("id", "name", "about", "website")
-        model = Company
+from apps.employers.models import Employer
 
 
 class EmployerSerializer(serializers.ModelSerializer):
     """Сериализация данных для профиля Работодателя."""
 
     class Meta:
-        fields = ("id", "company")
+        fields = (
+            "id",
+            "name",
+            "about",
+            "website",
+            "phone",
+            "email",
+            "activity",
+        )
         model = Employer

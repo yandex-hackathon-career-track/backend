@@ -41,7 +41,7 @@ class Vacancy(BaseModel):
         default_related_name = "vacancies"
 
     def __str__(self) -> str:
-        return f'Вакансия "{self.title}" для "{self.creator.company.name}"'
+        return f'Вакансия "{self.title}" для "{self.creator.name}"'
 
 
 # class VacancyStack(BaseModel):

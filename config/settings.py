@@ -34,6 +34,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "apps.users.apps.UsersConfig",
+    "apps.employers.apps.EmployersConfig",
+    "apps.vacancies.apps.VacanciesConfig",
     "apps.students.apps.StudentsConfig",
     "apps.attributes.apps.AttributesConfig",
     "apps.core.apps.CoreConfig",
@@ -119,6 +121,8 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DATE_FORMAT": "%d.%m.%Y",
+    "DATETIME_FORMAT": "%d.%m.%Y %H:%M",
 }
 
 SPECTACULAR_SETTINGS = {
@@ -130,9 +134,8 @@ SPECTACULAR_SETTINGS = {
 
 DJOSER = {
     "SERIALIZERS": {
-        # "user_create": "apps.users.serializers.CreateUserSerializer",
-        # "user": "apps.users.serializers.UserSerializer",
-        "current_user": "apps.api.v1.users.serializers.MeSerializer",
+        "user_create": "apps.api.v1.users.serializers.MyUserCreateSerializer",
+        "current_user": "apps.api.v1.users.serializers.MeUserSerializer",
     },
     "HIDE_USERS": True,
 }

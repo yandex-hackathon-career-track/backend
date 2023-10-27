@@ -8,16 +8,20 @@ from django.contrib.auth.models import (
 from django.db import models
 
 
-class CustomUserManager(BaseUserManager):
-    def normalize_email(cls, email: str) -> str:
-        """Нормализация email путем приведения его к нижнему регистру."""
-        return email.lower()
+class Role(models.TextChoices):
+    """Варианты роли пользователя."""
 
+    APPLICANT = "applicant", "соискатель"
+    EMPLOYER = "employer", "работодатель"
+    ADMIN = "admin", "администратор"
+
+
+class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Метод создания обычного пользователя."""
         if not email:
             raise ValueError("Необходимо указать адрес электронной почты")
-        email = self.normalize_email(email)
+        email = email.lower()
         user = self.model(email=email, **extra_fields)
         if not password:
             password = self.make_random_password(length=10)
@@ -30,6 +34,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("role", Role.ADMIN)
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Суперпользователь должен иметь is_staff=True.")
@@ -38,14 +43,6 @@ class CustomUserManager(BaseUserManager):
                 "Суперпользователь должен иметь is_superuser=True."
             )
         return self.create_user(email, password, **extra_fields)
-
-
-class Role(models.TextChoices):
-    """Варианты роли пользователя"""
-
-    APPLICANT = "applicant", "соискатель"
-    EMPLOYER = "employer", "работодатель"
-    ADMIN = "admin", "администратор"
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):

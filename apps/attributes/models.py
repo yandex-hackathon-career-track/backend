@@ -32,6 +32,7 @@ class Contact(BaseModel):
 
 class City(BaseModel):
     """Город."""
+
     name = models.CharField("Название", max_length=100)
 
     class Meta:
@@ -44,6 +45,7 @@ class City(BaseModel):
 
 class Stack(BaseModel):
     """Стек технологий."""
+
     name = models.CharField("Название", max_length=100)
 
     class Meta:
@@ -56,6 +58,7 @@ class Stack(BaseModel):
 
 class WorkFormat(BaseModel):
     """Формат работы."""
+
     name = models.CharField("Название", max_length=100)
 
     class Meta:
@@ -67,7 +70,8 @@ class WorkFormat(BaseModel):
 
 
 class Course(BaseModel):
-    """Опыт работы соискателя."""
+    """Курсы Практикума."""
+
     name = models.CharField("Название", max_length=100)
 
     direction = models.ForeignKey(
@@ -84,10 +88,38 @@ class Course(BaseModel):
 
 class ActivityStatus(BaseModel):
     """Статус активности."""
+
     name = models.CharField("Название", max_length=100)
+
     class Meta:
         verbose_name = "Статус активности"
         verbose_name_plural = "Статусы активности"
+
+    def __str__(self):
+        return self.name
+
+
+class ReviewStatus(BaseModel):
+    """Статус рассмотрения кандидата/отклика."""
+
+    name = models.CharField("Название", max_length=100)
+
+    class Meta:
+        verbose_name = "Статус рассмотрения"
+        verbose_name_plural = "Статусы рассмотрения"
+
+    def __str__(self):
+        return self.name
+
+
+class Occupation(BaseModel):
+    """Модель занятости."""
+
+    name = models.CharField("Название", max_length=100)
+
+    class Meta:
+        verbose_name = "Тип занятости"
+        verbose_name_plural = "Типы занятости"
 
     def __str__(self):
         return self.name

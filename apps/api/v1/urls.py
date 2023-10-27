@@ -1,16 +1,28 @@
 from django.urls import include, path
 from rest_framework import routers
 
+from .attributes import views
+from .employers.views import EmployerView
 from .users.views import UserViewSet
+from .vacancies.views import RespondViewSet, VacancyViewset
 
-app_name = "users"
+app_name = "api"
 
 router = routers.DefaultRouter()
 router.register("users", UserViewSet, basename="users")
-router.register("applicants", UserViewSet, basename="applicants")
+router.register("employers/vacancies", VacancyViewset, basename="my_vacancies")
+router.register(
+    "employers/vacancies/<uuid:pk>/responds",
+    RespondViewSet,
+    basename="responds",
+)
+# тут что-то не так - используется Userviewset
+# router.register("applicants", UserViewSet, basename="applicants")
+router.register("review_status", views.ReviewViewset, basename="review_status")
 
 
 urlpatterns = [
-    path("", include(router.urls)),
     path("auth/", include("djoser.urls.jwt")),
+    path("employers/me/", EmployerView.as_view(), name="employer_profile"),
+    path("", include(router.urls)),
 ]

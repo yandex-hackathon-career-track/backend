@@ -1,19 +1,22 @@
 from rest_framework import serializers
 
-
-from apps.students.models import PortfolioLink, Job, Education
 from apps.attributes.models import (
     ActivityStatus,
-    Direction,
-    Stack,
+    City,
     Contact,
     Course,
+    Direction,
+    Occupation,
+    ReviewStatus,
+    Stack,
     WorkFormat,
 )
+from apps.students.models import Education, Job, PortfolioLink
 
 
 class DirectionSerializer(serializers.ModelSerializer):
     """Сериализатор для отображения направлений."""
+
     class Meta:
         model = Direction
         fields = ("id", "name")
@@ -82,4 +85,28 @@ class ActivityStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityStatus
+        fields = ("id", "name")
+
+
+class ReviewStatusSerializer(serializers.ModelSerializer):
+    """Сериализатор для статуса рассмотрения откликов/резюме."""
+
+    class Meta:
+        model = ReviewStatus
+        fields = ("id", "name")
+
+
+class CitySerializer(serializers.ModelSerializer):
+    """Сериализатор для городов."""
+
+    class Meta:
+        model = City
+        fields = ("id", "name")
+
+
+class OccupationSerializer(serializers.ModelSerializer):
+    """Сериализатор для типов занятости."""
+
+    class Meta:
+        model = Occupation
         fields = ("id", "name")

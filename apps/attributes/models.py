@@ -70,7 +70,7 @@ class WorkFormat(BaseModel):
 
 
 class Course(BaseModel):
-    """Опыт работы соискателя."""
+    """Курсы Практикума."""
 
     name = models.CharField("Название", max_length=100)
 
@@ -107,6 +107,19 @@ class ReviewStatus(BaseModel):
     class Meta:
         verbose_name = "Статус рассмотрения"
         verbose_name_plural = "Статусы рассмотрения"
+
+    def __str__(self):
+        return self.name
+
+
+class Occupation(BaseModel):
+    """Модель занятости."""
+
+    name = models.CharField("Название", max_length=100)
+
+    class Meta:
+        verbose_name = "Тип занятости"
+        verbose_name_plural = "Типы занятости"
 
     def __str__(self):
         return self.name

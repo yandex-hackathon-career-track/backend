@@ -3,6 +3,7 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 from apps.users.models import Role
 from apps.vacancies.models import Vacancy
 from apps.vacancies.selectors import user_is_vacancy_creator
+from apps.students.models import Applicant
 
 
 class IsEmployerOrReadOnly(BasePermission):

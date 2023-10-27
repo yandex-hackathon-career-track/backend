@@ -45,7 +45,6 @@ class ApplicantSerializer(serializers.ModelSerializer):
             "user",
             "first_name",
             "last_name",
-            "can_relocate",
             "jobs",
             "stack",
             "city",

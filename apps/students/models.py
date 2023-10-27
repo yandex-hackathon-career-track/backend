@@ -32,7 +32,6 @@ class Applicant(BaseModel):
     )
     first_name = models.CharField("Имя", max_length=30)
     last_name = models.CharField("Фамилия", max_length=30)
-    can_relocate = models.BooleanField("Релокация")
     stack = models.ManyToManyField(
         Stack, related_name="applicant", verbose_name="Стек"
     )

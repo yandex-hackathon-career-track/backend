@@ -5,6 +5,7 @@ from .attributes import views
 from .employers.views import EmployerView
 from .users.views import UserViewSet
 from .vacancies.views import RespondViewSet, VacancyViewset
+from .students.views import ApplicantViewSet
 
 app_name = "api"
 
@@ -16,8 +17,7 @@ router.register(
     RespondViewSet,
     basename="responds",
 )
-# тут что-то не так - используется Userviewset
-# router.register("applicants", UserViewSet, basename="applicants")
+router.register("applicants", ApplicantViewSet, basename="applicants")
 router.register("review_status", views.ReviewViewset, basename="review_status")
 
 

@@ -45,20 +45,6 @@ class Vacancy(BaseModel):
         return f'Вакансия "{self.title}" для "{self.creator.name}"'
 
 
-# class VacancyStack(BaseModel):
-#     """Промежуточная модель для требуемого Стека в Вакансии."""
-
-#     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
-#     stack = models.ForeignKey(Stack, on_delete=models.CASCADE)
-
-#     class Meta:
-#         verbose_name = "Инструмент в Вакансии"
-#         verbose_name_plural = "Инструменты в вакансиях"
-
-#     def __str__(self) -> str:
-#         return f"{self.stack.name} в вакансии {self.vacancy.title}"
-
-
 class Respond(BaseModel):
     """Модель отклика на вакансии."""
 
@@ -79,6 +65,7 @@ class Respond(BaseModel):
         verbose_name = "Отклик"
         verbose_name_plural = "Отклики"
         default_related_name = "responds"
+        ordering = ("-created_at",)
         constraints = (
             models.UniqueConstraint(
                 fields=("vacancy", "applicant"),

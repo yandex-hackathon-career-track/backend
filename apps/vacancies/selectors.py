@@ -41,12 +41,21 @@ def get_published_vacancies() -> QuerySet:
     )
 
 
-def get_vacancy_responds(vacancy_id: UUID) -> QuerySet:
-    """Выгрузка всех откликов на вакансию."""
-    vacancy = get_object_or_404(Vacancy, id=vacancy_id)
-    return vacancy.responds.select_related(
-        "applicant", "applicant__contact", "status"
+def get_vacancy_with_responds(vacancy_id: UUID) -> Vacancy:
+    """Поиск вакансии по id с загрузкой откликов и статистикой."""
+    queryset = Vacancy.objects.prefetch_related(
+        "responds",
+        "responds__applicant",
+        "responds__applicant__contact",
+        "responds__status",
+    ).annotate(
+        new=Value(0),
+        under_review=Value(0),
+        sent_test=Value(0),
+        interview=Value(0),
+        refusal=Value(0),
     )
+    return get_object_or_404(queryset, id=vacancy_id)
 
 
 def user_is_vacancy_creator(user: CustomUser, vacancy_id: UUID) -> bool:
@@ -70,3 +79,7 @@ def already_responded(vacancy_id: int, applicant) -> bool:
     return Respond.objects.filter(
         vacancy_id=vacancy_id, applicant=applicant
     ).exists()
+
+
+def get_respond_by_id(vacancy_id: UUID, respond_id: int) -> Respond:
+    return get_object_or_404(Respond, id=respond_id, vacancy_id=vacancy_id)

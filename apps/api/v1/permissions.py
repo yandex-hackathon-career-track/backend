@@ -20,15 +20,10 @@ class IsEmployerOrReadOnly(BasePermission):
         )
 
 
-class RespondPermission(BasePermission):
+class IsEmployerCreator(BasePermission):
     def has_permission(self, request, view) -> bool:
-        """Создание для соискателей, чтение/изменение - для автора вакансии."""
-        if request.method == "POST":
-            return (
-                request.user.is_authenticated
-                and request.user.role == Role.APPLICANT
-            )
-        user, vacancy_id = request.user, request.kwargs.get("pk")
+        """Доступ только для автора вакансии."""
+        user, vacancy_id = request.user, view.kwargs.get("pk")
         return request.user.is_authenticated and user_is_vacancy_creator(
             user, vacancy_id
         )

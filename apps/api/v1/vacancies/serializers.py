@@ -164,3 +164,26 @@ class GetRespondSerializer(BaseRespondSerializer):
 
     class Meta(BaseRespondSerializer.Meta):
         fields = BaseRespondSerializer.Meta.fields + ("status",)
+
+
+class VacancyWithRespondsSerializer(serializers.ModelSerializer):
+    """Сериализация списка откликов и статистики."""
+
+    responds = GetRespondSerializer(many=True)
+    new = serializers.IntegerField()
+    under_review = serializers.IntegerField()
+    sent_test = serializers.IntegerField()
+    interview = serializers.IntegerField()
+    refusal = serializers.IntegerField()
+
+    class Meta:
+        model = Vacancy
+        fields = (
+            "id",
+            "new",
+            "under_review",
+            "sent_test",
+            "interview",
+            "refusal",
+            "responds",
+        )

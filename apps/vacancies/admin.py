@@ -5,4 +5,5 @@ from .models import Vacancy
 
 @admin.register(Vacancy)
 class VacancyAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("creator", "title", "is_published")
+    empty_value_display = "-пусто-"

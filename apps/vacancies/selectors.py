@@ -10,7 +10,7 @@ from .models import Vacancy
 
 def add_all_associated_tables(queryset: QuerySet) -> QuerySet:
     """Загрузка сопутствующих таблиц."""
-    return queryset.select_related("city", "creator")
+    return queryset.select_related("city", "attendance", "occupation")
 
 
 def add_annotation(queryset: QuerySet) -> QuerySet:
@@ -29,7 +29,7 @@ def get_employer_vacancies_by_user(user: CustomUser, action: str) -> QuerySet:
     if action == "list":
         return add_annotation(vacancies)
     if action == "retrieve":
-        return add_all_associated_tables
+        return add_all_associated_tables(queryset=vacancies)
     return vacancies
 
 

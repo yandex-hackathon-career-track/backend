@@ -3,7 +3,12 @@ from rest_framework import serializers
 from apps.students.models import Applicant
 from apps.vacancies.models import Vacancy, Respond
 
-from ..attributes.serializers import CitySerializer, ReviewStatusSerializer
+from ..attributes.serializers import (
+    ReviewStatusSerializer,
+    WorkFormatSerializer,
+    OccupationSerializer,
+    CitySerializer,
+)
 
 
 class BaseVacancySerializer(serializers.ModelSerializer):
@@ -53,11 +58,12 @@ class ListVacancySerializer(BaseVacancySerializer):
 class DetailVacancySerializer(BaseVacancySerializer):
     """Сериализация для 1 вакансии работодателя."""
 
+    attendance = WorkFormatSerializer()
+    occupation = OccupationSerializer()
     city = CitySerializer()
 
     class Meta(BaseVacancySerializer.Meta):
         fields = BaseVacancySerializer.Meta.fields + (
-            "creator",
             "attendance",
             "occupation",
             "description",

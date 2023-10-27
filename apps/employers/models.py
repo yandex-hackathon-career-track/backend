@@ -39,6 +39,9 @@ class Employer(BaseModel):
         verbose_name = "Работодатель"
         verbose_name_plural = "Работодатели"
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class SelectedResume(BaseModel):
     """Модель отобранных работодателем соискателей."""

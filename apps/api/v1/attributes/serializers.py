@@ -6,6 +6,7 @@ from apps.attributes.models import (
     Contact,
     Course,
     Direction,
+    Occupation,
     ReviewStatus,
     Stack,
     WorkFormat,
@@ -100,4 +101,12 @@ class CitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = City
+        fields = ("id", "name")
+
+
+class OccupationSerializer(serializers.ModelSerializer):
+    """Сериализатор для типов занятости."""
+
+    class Meta:
+        model = Occupation
         fields = ("id", "name")

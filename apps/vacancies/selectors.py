@@ -76,10 +76,12 @@ def same_titled_vacancy_exists(
 
 
 def already_responded(vacancy_id: int, applicant) -> bool:
+    """Проверка, что соискатель уже откликался на вакансию."""
     return Respond.objects.filter(
         vacancy_id=vacancy_id, applicant=applicant
     ).exists()
 
 
 def get_respond_by_id(vacancy_id: UUID, respond_id: int) -> Respond:
+    """Получение отклика по id вакансии и id отклика"""
     return get_object_or_404(Respond, id=respond_id, vacancy_id=vacancy_id)

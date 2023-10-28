@@ -46,18 +46,21 @@ class ReviewStatusAdmin(admin.ModelAdmin):
 @admin.register(Stack)
 class StackAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
+    search_fields = ("name",)
     empty_value_display = "-пусто-"
 
 
 @admin.register(WorkFormat)
 class WorkFormatAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
+    search_fields = ("name",)
     empty_value_display = "-пусто-"
 
 
 @admin.register(Occupation)
 class OccupationAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
+    search_fields = ("name",)
     empty_value_display = "-пусто-"
 
 

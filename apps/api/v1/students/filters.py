@@ -60,6 +60,7 @@ class ApplicantFilter(django_filters.FilterSet):
         to_field_name="name",
         label="Occupation",
     )
+    is_selected = django_filters.BooleanFilter()
 
     class Meta:
         model = Applicant
@@ -70,6 +71,7 @@ class ApplicantFilter(django_filters.FilterSet):
             "direction",
             "status",
             "occupation",
+            "is_selected",
         ]
         order_by = [
             ("-graduation_date", "Сортировка по дате окончания обучения"),

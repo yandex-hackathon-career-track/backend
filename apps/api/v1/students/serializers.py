@@ -44,6 +44,7 @@ class ApplicantSerializer(serializers.ModelSerializer):
     educations = EducationSerializer(many=True, read_only=True)
     occupation = OccupationSerializer(many=True)
     direction = serializers.SerializerMethodField()
+    is_selected = serializers.BooleanField()
 
     def get_direction(self, obj):
         if obj.applicant_courses.exists():
@@ -85,6 +86,7 @@ class ApplicantSerializer(serializers.ModelSerializer):
             "portfolio_links",
             "contact",
             "updated_at",
+            "is_selected",
         )
 
 
@@ -95,6 +97,7 @@ class ApplicantsListSerializer(serializers.ModelSerializer):
     stack = StackSerializer(many=True)
     direction = serializers.SerializerMethodField()
     latest_graduation_date = serializers.SerializerMethodField()
+    is_selected = serializers.BooleanField()
 
     def get_direction(self, obj):
         if obj.applicant_courses.exists():
@@ -124,4 +127,5 @@ class ApplicantsListSerializer(serializers.ModelSerializer):
             "direction",
             "updated_at",
             "latest_graduation_date",
+            "is_selected",
         )

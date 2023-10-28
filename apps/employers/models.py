@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 
 from apps.attributes.models import ReviewStatus
+from apps.core.constants import UNCHOSEN_STATUS_ID
 from apps.core.models import BaseModel
 from apps.students.models import Applicant
 from apps.users.models import CustomUser
@@ -62,8 +63,11 @@ class SelectedResume(BaseModel):
         ReviewStatus,
         on_delete=models.PROTECT,
         verbose_name="Статус кандидата",
+        default=UNCHOSEN_STATUS_ID,
     )
-    comments = models.CharField(verbose_name="Комментарии", max_length=255)
+    comments = models.CharField(
+        verbose_name="Комментарии", max_length=255, blank=True
+    )
 
     class Meta:
         verbose_name = "Отобранный соискатель"

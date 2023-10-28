@@ -1,70 +1,17 @@
-from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema
+from rest_framework import views, status
+from rest_framework.response import Response
 
-from apps.attributes.models import (
-    ActivityStatus,
-    City,
-    Course,
-    Direction,
-    Occupation,
-    ReviewStatus,
-    Stack,
-    WorkFormat,
-)
+from apps.attributes.selectors import get_atrributes
 
-from . import serializers
+from .serializers import AttributesSerializer
 
 
-class DirectionViewset(viewsets.ReadOnlyModelViewSet):
-    """Просмотр направлений курсов."""
+@extend_schema(responses=AttributesSerializer)
+class AttributesView(views.APIView):
+    """Просмотр всех доступных атрибутов."""
 
-    queryset = Direction.objects.all()
-    serializer_class = serializers.ReviewStatusSerializer
-
-
-class CourseViewset(viewsets.ReadOnlyModelViewSet):
-    """Просмотр статусов рассмотрения откликов/резюме."""
-
-    queryset = Course.objects.all()
-    serializer_class = serializers.CourseSerializer
-
-
-class StackViewset(viewsets.ReadOnlyModelViewSet):
-    """Просмотр стека инструментов."""
-
-    queryset = Stack.objects.select_related("direction")
-    serializer_class = serializers.StackSerializer
-
-
-class WorkFormatViewset(viewsets.ReadOnlyModelViewSet):
-    """Просмотр форматов работы."""
-
-    queryset = WorkFormat.objects.all()
-    serializer_class = serializers.WorkFormatSerializer
-
-
-class OccupationViewset(viewsets.ReadOnlyModelViewSet):
-    """Просмотр типов занятости."""
-
-    queryset = Occupation.objects.all()
-    serializer_class = serializers.OccupationSerializer
-
-
-class CityViewset(viewsets.ReadOnlyModelViewSet):
-    """Просмотр городов."""
-
-    queryset = City.objects.all()
-    serializer_class = serializers.CitySerializer
-
-
-class ActivityStatusViewset(viewsets.ReadOnlyModelViewSet):
-    """Просмотр статусов активности студентов."""
-
-    queryset = ActivityStatus.objects.all()
-    serializer_class = serializers.ActivityStatusSerializer
-
-
-class ReviewViewset(viewsets.ReadOnlyModelViewSet):
-    """Просмотр статусов рассмотрения откликов/резюме."""
-
-    queryset = ReviewStatus.objects.all()
-    serializer_class = serializers.ReviewStatusSerializer
+    def get(self, request):
+        data = get_atrributes()
+        serializer = AttributesSerializer(instance=data)
+        return Response(serializer.data, status=status.HTTP_200_OK)

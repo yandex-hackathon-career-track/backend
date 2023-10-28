@@ -50,6 +50,7 @@ class VacancyViewset(viewsets.ReadOnlyModelViewSet):
     queryset = get_published_vacancies()
     serializer_class = ser.DetailVacancySerializer
 
+    @extend_schema(request=ser.CreateRespondSerializer)
     @decorators.action(methods=["post"], detail=True)
     def respond(self, request, pk):
         """Создание отклика на вакансию."""
@@ -88,5 +89,5 @@ class UpdateRespondStatusView(views.APIView):
             instance=respond, data=request.data
         )
         serializer.is_valid(raise_exception=True)
-        respond = serializer.save()
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

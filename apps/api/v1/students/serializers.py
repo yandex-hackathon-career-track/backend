@@ -36,13 +36,13 @@ class ApplicantSerializer(serializers.ModelSerializer):
     city = serializers.StringRelatedField(read_only=True)
     jobs = JobSerializer(many=True)
     stack = StackSerializer(many=True)
-    work_format = WorkFormatSerializer()
+    work_format = WorkFormatSerializer(many=True)
     contact = ContactSerializer()
     applicant_courses = ApplicantCourseSerializer(many=True)
     status = ActivityStatusSerializer()
     portfolio_links = PortfolioLinkSerializer(many=True, read_only=True)
     educations = EducationSerializer(many=True, read_only=True)
-    occupation = OccupationSerializer()
+    occupation = OccupationSerializer(many=True)
     direction = serializers.SerializerMethodField()
 
     def get_direction(self, obj):
@@ -56,7 +56,9 @@ class ApplicantSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         contact_data = data.get("contact")
         if contact_data:
-            contact_data = {key: value for key, value in contact_data.items() if value}
+            contact_data = {
+                key: value for key, value in contact_data.items() if value
+            }
             if contact_data:
                 data["contact"] = contact_data
             else:

@@ -110,3 +110,16 @@ class OccupationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Occupation
         fields = ("id", "name")
+
+
+class AttributesSerializer(serializers.Serializer):
+    """Сериализация списков всех атрибутов."""
+
+    directions = DirectionSerializer(many=True)
+    cources = CourseSerializer(many=True)
+    stack = StackSerializer(many=True)
+    work_formats = WorkFormatSerializer(many=True)
+    occupations = OccupationSerializer(many=True)
+    cities = CitySerializer(many=True)
+    activity_statuses = ActivityStatusSerializer(many=True)
+    review_statuses = ReviewStatusSerializer(many=True)

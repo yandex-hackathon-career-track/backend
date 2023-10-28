@@ -3,6 +3,7 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 from apps.users.models import Role
 from apps.vacancies.models import Vacancy
 from apps.vacancies.selectors import user_is_vacancy_creator
+from apps.students.models import Applicant
 
 
 class IsEmployerOrReadOnly(BasePermission):
@@ -40,4 +41,13 @@ class IsEmployer(BasePermission):
         return (
             request.user.is_authenticated
             and request.user.role == Role.EMPLOYER
+        )
+
+
+class IsApplicant(BasePermission):
+    def has_permission(self, request, view):
+        """Только для пользователей-соискателей."""
+        return (
+            request.user.is_authenticated
+            and request.user.role == Role.APPLICANT
         )

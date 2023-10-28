@@ -31,7 +31,7 @@ class CourseViewset(viewsets.ReadOnlyModelViewSet):
 class StackViewset(viewsets.ReadOnlyModelViewSet):
     """Просмотр стека инструментов."""
 
-    queryset = Stack.objects.all()
+    queryset = Stack.objects.select_related("direction")
     serializer_class = serializers.StackSerializer
 
 

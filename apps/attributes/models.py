@@ -9,8 +9,8 @@ class Direction(BaseModel):
     name = models.CharField("Название", max_length=100)
 
     class Meta:
-        verbose_name = "Должность"
-        verbose_name_plural = "Должности"
+        verbose_name = "Направление"
+        verbose_name_plural = "Направления"
 
     def __str__(self):
         return self.name

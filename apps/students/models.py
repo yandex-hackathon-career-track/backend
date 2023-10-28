@@ -59,18 +59,12 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Статус",
     )
-    work_format = models.ForeignKey(
+    work_format = models.ManyToManyField(
         WorkFormat,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="applicant",
         verbose_name="Формат работы",
     )
-    occupation = models.ForeignKey(
+    occupation = models.ManyToManyField(
         Occupation,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="applicant",
         verbose_name="Тип занятости",
     )
 
@@ -138,7 +132,7 @@ class Job(BaseModel):
         verbose_name_plural = "Работа"
 
     def __str__(self):
-        return self.name
+        return f"Работа {self.applicant} в {self.name}"
 
 
 class Education(BaseModel):
@@ -157,7 +151,7 @@ class Education(BaseModel):
         verbose_name_plural = "Образование"
 
     def __str__(self):
-        return self.name
+        return f"Образование {self.applicant} в {self.name}"
 
 
 class PortfolioLink(BaseModel):
@@ -177,4 +171,4 @@ class PortfolioLink(BaseModel):
         verbose_name_plural = "Ссылка на портфолио"
 
     def __str__(self):
-        return self.name
+        return f"Портфолио {self.applicant} на {self.name}"

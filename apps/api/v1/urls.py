@@ -22,6 +22,15 @@ router.register(
 router.register("vacancies", VacancyViewset, basename="vacancies")
 router.register("applicants", ApplicantViewSet, basename="applicants")
 router.register("review_status", views.ReviewViewset, basename="review_status")
+router.register("directions", views.DirectionViewset, basename="directions")
+router.register("cources", views.CourseViewset, basename="courses")
+router.register("stack", views.StackViewset, basename="stack")
+router.register(
+    "work_formats", views.WorkFormatViewset, basename="work_formats"
+)
+router.register("occupations", views.OccupationViewset, basename="occupations")
+router.register("cities", views.CityViewset, basename="cities")
+router.register("activity", views.ActivityStatusViewset, basename="activity")
 
 
 urlpatterns = [

@@ -2,6 +2,10 @@ from rest_framework import serializers
 
 from apps.students.models import Applicant
 from apps.vacancies.models import Vacancy, Respond
+from apps.vacancies.selectors import (
+    same_titled_vacancy_exists,
+    already_responded,
+)
 
 from ..attributes.serializers import (
     ReviewStatusSerializer,
@@ -9,6 +13,7 @@ from ..attributes.serializers import (
     OccupationSerializer,
     CitySerializer,
 )
+from ..employers.serializers import EmployerSerializer
 
 
 class BaseVacancySerializer(serializers.ModelSerializer):
@@ -37,6 +42,21 @@ class UnsafeVacancySerializer(BaseVacancySerializer):
             "city",
         )
 
+    def validate(self, data):
+        employer = self.context.get("request").user.employer
+        if not employer.name or not (employer.email or employer.phone):
+            raise serializers.ValidationError(
+                "Необходимо заполнить профиль перед публикацией вакансии."
+            )
+        title = data.get("title")
+        if title and same_titled_vacancy_exists(
+            title, employer, self.instance
+        ):
+            raise serializers.ValidationError(
+                "Уже есть вакансия на такую должность."
+            )
+        return super().validate(data)
+
 
 class ListVacancySerializer(BaseVacancySerializer):
     """Сериализация для списка вакансий в ЛК работодателя."""
@@ -55,8 +75,8 @@ class ListVacancySerializer(BaseVacancySerializer):
         )
 
 
-class DetailVacancySerializer(BaseVacancySerializer):
-    """Сериализация для 1 вакансии работодателя."""
+class DetailMyVacancySerializer(BaseVacancySerializer):
+    """Сериализация для 1 вакансии работодателя (для изменения)."""
 
     attendance = WorkFormatSerializer()
     occupation = OccupationSerializer()
@@ -64,6 +84,27 @@ class DetailVacancySerializer(BaseVacancySerializer):
 
     class Meta(BaseVacancySerializer.Meta):
         fields = BaseVacancySerializer.Meta.fields + (
+            "attendance",
+            "occupation",
+            "description",
+            "min_salary",
+            "max_salary",
+            "city",
+        )
+        model = Vacancy
+
+
+class DetailVacancySerializer(BaseVacancySerializer):
+    """Сериализация для 1 вакансии работодателя (для просмотра)."""
+
+    creator = EmployerSerializer()
+    attendance = WorkFormatSerializer()
+    occupation = OccupationSerializer()
+    city = CitySerializer()
+
+    class Meta(BaseVacancySerializer.Meta):
+        fields = BaseVacancySerializer.Meta.fields + (
+            "creator",
             "attendance",
             "occupation",
             "description",
@@ -86,15 +127,63 @@ class ApplicantInRespondSerializer(serializers.ModelSerializer):
 
 
 class BaseRespondSerializer(serializers.ModelSerializer):
+    """Базовый сериализатор для откликов."""
+
     class Meta:
-        fields = ("id", "applicant", "status")
+        fields = ("id", "applicant")
         model = Respond
 
 
-class UnsafeRespondSerializer(BaseRespondSerializer):
-    pass
+class CreateRespondSerializer(BaseRespondSerializer):
+    """Сериализатор для создания откликов."""
+
+    def validate(self, data):
+        vacancy_id = self.context.get("view").kwargs.get("pk")
+        if already_responded(
+            vacancy_id=vacancy_id, applicant=data.get("applicant")
+        ):
+            raise serializers.ValidationError(
+                "Откликнуться можно только 1 раз."
+            )
+        return super().validate(data)
+
+
+class EditRespondSerializer(BaseRespondSerializer):
+    """Сериализатор для Изменения статуса отклика."""
+
+    class Meta(BaseRespondSerializer.Meta):
+        fields = BaseRespondSerializer.Meta.fields + ("status",)
+        read_only_fields = ("applicant",)
 
 
 class GetRespondSerializer(BaseRespondSerializer):
-    applicant = ApplicantInRespondSerializer
-    status = ReviewStatusSerializer
+    """Сериализатор для получения списка откликов."""
+
+    applicant = ApplicantInRespondSerializer()
+    status = ReviewStatusSerializer()
+
+    class Meta(BaseRespondSerializer.Meta):
+        fields = BaseRespondSerializer.Meta.fields + ("status",)
+
+
+class VacancyWithRespondsSerializer(serializers.ModelSerializer):
+    """Сериализация списка откликов и статистики."""
+
+    responds = GetRespondSerializer(many=True)
+    new = serializers.IntegerField()
+    under_review = serializers.IntegerField()
+    sent_test = serializers.IntegerField()
+    interview = serializers.IntegerField()
+    refusal = serializers.IntegerField()
+
+    class Meta:
+        model = Vacancy
+        fields = (
+            "id",
+            "new",
+            "under_review",
+            "sent_test",
+            "interview",
+            "refusal",
+            "responds",
+        )

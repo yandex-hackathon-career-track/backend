@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 
 from apps.attributes.models import City, Occupation, ReviewStatus, WorkFormat
+from apps.core.constants import UNCHOSEN_STATUS_ID
 from apps.core.models import BaseModel
 from apps.employers.models import Employer
 from apps.students.models import Applicant
@@ -44,20 +45,6 @@ class Vacancy(BaseModel):
         return f'Вакансия "{self.title}" для "{self.creator.name}"'
 
 
-# class VacancyStack(BaseModel):
-#     """Промежуточная модель для требуемого Стека в Вакансии."""
-
-#     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
-#     stack = models.ForeignKey(Stack, on_delete=models.CASCADE)
-
-#     class Meta:
-#         verbose_name = "Инструмент в Вакансии"
-#         verbose_name_plural = "Инструменты в вакансиях"
-
-#     def __str__(self) -> str:
-#         return f"{self.stack.name} в вакансии {self.vacancy.title}"
-
-
 class Respond(BaseModel):
     """Модель отклика на вакансии."""
 
@@ -71,12 +58,14 @@ class Respond(BaseModel):
         ReviewStatus,
         on_delete=models.PROTECT,
         verbose_name="Статус рассмотрения отклика",
+        default=UNCHOSEN_STATUS_ID,
     )
 
     class Meta:
         verbose_name = "Отклик"
         verbose_name_plural = "Отклики"
         default_related_name = "responds"
+        ordering = ("-created_at",)
         constraints = (
             models.UniqueConstraint(
                 fields=("vacancy", "applicant"),

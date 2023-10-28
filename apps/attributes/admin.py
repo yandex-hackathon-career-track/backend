@@ -9,6 +9,7 @@ from .models import (
     Stack,
     WorkFormat,
     Occupation,
+    Contact,
 )
 
 
@@ -57,4 +58,10 @@ class WorkFormatAdmin(admin.ModelAdmin):
 @admin.register(Occupation)
 class OccupationAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
+    empty_value_display = "-пусто-"
+
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ("id", "email", "telegram")
     empty_value_display = "-пусто-"

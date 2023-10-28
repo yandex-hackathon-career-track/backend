@@ -1,18 +1,22 @@
 import uuid
 
 from django.db import models
-from datetime import date
 
 from apps.attributes.models import (
     ActivityStatus,
     City,
     Course,
     Contact,
+    Occupation,
     Stack,
     WorkFormat,
 )
 from apps.core.models import BaseModel
 from apps.users.models import CustomUser
+from apps.core.utils import (
+    calculate_job_experience,
+    calculate_total_experience,
+)
 
 
 class Applicant(BaseModel):
@@ -62,16 +66,17 @@ class Applicant(BaseModel):
         related_name="applicant",
         verbose_name="Формат работы",
     )
-
-    def calculate_total_experience(self):
-        total_experience = 0
-        for job in self.jobs.all():
-            total_experience += job.experience
-        return total_experience
+    occupation = models.ForeignKey(
+        Occupation,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="applicant",
+        verbose_name="Тип занятости",
+    )
 
     @property
     def total_experience(self):
-        return self.calculate_total_experience()
+        return calculate_total_experience(self)
 
     class Meta:
         verbose_name = "Соискатель"
@@ -107,6 +112,8 @@ class ApplicantCourse(BaseModel):
 
 
 class Job(BaseModel):
+    """Работа."""
+
     applicant = models.ForeignKey(
         Applicant,
         on_delete=models.CASCADE,
@@ -122,16 +129,9 @@ class Job(BaseModel):
 
     @property
     def experience(self):
-        if self.is_current:
-            today = date.today()
-            delta = today - self.start_date
-        elif self.end_date:
-            delta = self.end_date - self.start_date
-        else:
-            return 0
-
-        months = delta.days // 30
-        return months
+        return calculate_job_experience(
+            self.start_date, self.end_date, self.is_current
+        )
 
     class Meta:
         verbose_name = "Работа"

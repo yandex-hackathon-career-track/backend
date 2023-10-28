@@ -1,10 +1,12 @@
 from rest_framework import serializers
+from django.db.models import Max
 
 from apps.students.models import Applicant, ApplicantCourse
 from apps.api.v1.attributes.serializers import (
     ActivityStatusSerializer,
     CourseSerializer,
     EducationSerializer,
+    OccupationSerializer,
     PortfolioLinkSerializer,
     JobSerializer,
     StackSerializer,
@@ -17,11 +19,15 @@ class ApplicantCourseSerializer(serializers.ModelSerializer):
     """Сериализатор для отображения курсов соискателя."""
 
     course = CourseSerializer()
-    name = serializers.StringRelatedField(read_only=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["course"] = instance.course.name
+        return data
 
     class Meta:
         model = ApplicantCourse
-        fields = ("id", "name", "applicant", "course", "graduation_date")
+        fields = ("id", "course", "graduation_date")
 
 
 class ApplicantSerializer(serializers.ModelSerializer):
@@ -32,11 +38,76 @@ class ApplicantSerializer(serializers.ModelSerializer):
     stack = StackSerializer(many=True)
     work_format = WorkFormatSerializer()
     contact = ContactSerializer()
-    applicant_courses = ApplicantCourseSerializer(many=True, read_only=True)
+    applicant_courses = ApplicantCourseSerializer(many=True)
     status = ActivityStatusSerializer()
     portfolio_links = PortfolioLinkSerializer(many=True, read_only=True)
     educations = EducationSerializer(many=True, read_only=True)
-    course_directions = CourseSerializer(many=True, read_only=True)
+    occupation = OccupationSerializer()
+    direction = serializers.SerializerMethodField()
+
+    def get_direction(self, obj):
+        if obj.applicant_courses.exists():
+            latest_course = obj.applicant_courses.latest("graduation_date")
+            direction = latest_course.course.direction
+            return {"id": direction.id, "name": direction.name}
+        return None
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        contact_data = data.get("contact")
+        if contact_data:
+            contact_data = {key: value for key, value in contact_data.items() if value}
+            if contact_data:
+                data["contact"] = contact_data
+            else:
+                del data["contact"]
+        return data
+
+    class Meta:
+        model = Applicant
+        fields = (
+            "id",
+            "user",
+            "status",
+            "first_name",
+            "last_name",
+            "direction",
+            "total_experience",
+            "jobs",
+            "applicant_courses",
+            "educations",
+            "stack",
+            "work_format",
+            "occupation",
+            "city",
+            "portfolio_links",
+            "contact",
+            "updated_at",
+        )
+
+
+class ApplicantsListSerializer(serializers.ModelSerializer):
+    """Сериализатор для отображения списка соискателей."""
+
+    status = ActivityStatusSerializer()
+    stack = StackSerializer(many=True)
+    direction = serializers.SerializerMethodField()
+    latest_graduation_date = serializers.SerializerMethodField()
+
+    def get_direction(self, obj):
+        if obj.applicant_courses.exists():
+            latest_course = obj.applicant_courses.latest("graduation_date")
+            direction = latest_course.course.direction
+            return {"id": direction.id, "name": direction.name}
+        return None
+
+    def get_latest_graduation_date(self, obj):
+        if obj.applicant_courses.exists():
+            latest_course = obj.applicant_courses.annotate(
+                latest_graduation_date=Max("graduation_date")
+            ).first()
+            return latest_course.latest_graduation_date
+        return None
 
     class Meta:
         model = Applicant
@@ -45,41 +116,10 @@ class ApplicantSerializer(serializers.ModelSerializer):
             "user",
             "first_name",
             "last_name",
-            "jobs",
-            "stack",
-            "city",
-            "contact",
-            "status",
-            "total_experience",
-            "work_format",
-            "applicant_courses",
-            "portfolio_links",
-            "educations",
-            "course_directions",
-        )
-
-
-class ApplicantsListSerializer(serializers.ModelSerializer):
-    """Сериализатор для отображения списка соискателей."""
-    status = ActivityStatusSerializer()
-    stack = StackSerializer(many=True)
-
-    class Meta:
-        model = Applicant
-        fields = (
-            "id",
-            "first_name",
-            "last_name",
             "stack",
             "status",
             "total_experience",
+            "direction",
+            "updated_at",
+            "latest_graduation_date",
         )
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        applicant_courses = instance.applicant_courses.all()
-        data["applicant_courses"] = [
-            {"id": course.course.id, "name": course.course.name}
-            for course in applicant_courses
-        ]
-        return data

@@ -37,7 +37,7 @@ class PortfolioLinkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PortfolioLink
-        fields = ("id", "applicant", "name", "link")
+        fields = ("id", "name", "link")
 
 
 class JobSerializer(serializers.ModelSerializer):
@@ -45,7 +45,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = ("id", "name")
+        fields = ("id", "name", "experience")
 
 
 class StackSerializer(serializers.ModelSerializer):

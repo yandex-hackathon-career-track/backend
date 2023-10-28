@@ -113,6 +113,8 @@ class OccupationSerializer(serializers.ModelSerializer):
 
 
 class AttributesSerializer(serializers.Serializer):
+    """Сериализация списков всех атрибутов."""
+
     directions = DirectionSerializer(many=True)
     cources = CourseSerializer(many=True)
     stack = StackSerializer(many=True)

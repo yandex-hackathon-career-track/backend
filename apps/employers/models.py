@@ -50,7 +50,7 @@ class SelectedResume(BaseModel):
         Employer,
         on_delete=models.CASCADE,
         verbose_name="Работодатель",
-        related_name="selected_resume",
+        related_name="selected_resumes",
     )
     applicant = models.ForeignKey(
         Applicant,

@@ -21,6 +21,9 @@ router.register(
 )
 router.register("vacancies", VacancyViewset, basename="vacancies")
 router.register("applicants", ApplicantViewSet, basename="applicants")
+# router.register(
+#     "applicants/<uuid:id>/selected", SelectedResumeView, basename="selected"
+# )
 
 
 urlpatterns = [

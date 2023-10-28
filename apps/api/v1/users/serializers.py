@@ -14,7 +14,7 @@ class MeUserSerializer(serializers.ModelSerializer):
         fields = ("id", "email", "role", "profile_id")
         model = CustomUser
 
-    def get_profile_id(self, obj: Role):
+    def get_profile_id(self, obj: CustomUser):
         if obj.role == Role.EMPLOYER:
             return obj.employer.id
         if obj.role == Role.APPLICANT:

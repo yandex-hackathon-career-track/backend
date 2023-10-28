@@ -11,7 +11,6 @@ from .filters import ApplicantFilter
 
 
 class ApplicantViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = get_all_applicants()
     filter_backends = [DjangoFilterBackend]
     filterset_class = ApplicantFilter
     permission_classes = (IsEmployer,)
@@ -20,3 +19,6 @@ class ApplicantViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == "list":
             return ApplicantsListSerializer
         return ApplicantSerializer
+
+    def get_queryset(self):
+        return get_all_applicants(user=self.request.user)

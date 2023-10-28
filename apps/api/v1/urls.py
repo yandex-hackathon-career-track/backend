@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 
 from .attributes.views import AttributesView
-from .employers.views import EmployerView
+from .employers.views import EmployerView, SelectedResumeView
 from .users.views import UserViewSet
 from .vacancies.views import (
     MyVacancyViewset,
@@ -28,6 +28,11 @@ router.register("applicants", ApplicantViewSet, basename="applicants")
 
 urlpatterns = [
     path("auth/", include("djoser.urls.jwt")),
+    path(
+        "applicants/<uuid:id>/selected/",
+        SelectedResumeView.as_view(),
+        name="selected",
+    ),
     path("attributes/", AttributesView.as_view(), name="attributes"),
     path("employers/me/", EmployerView.as_view(), name="employer_profile"),
     path(

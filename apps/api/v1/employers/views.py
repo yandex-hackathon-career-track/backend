@@ -22,7 +22,10 @@ class EmployerView(generics.RetrieveUpdateAPIView):
 
 
 class SelectedResumeView(views.APIView):
+    """Добавление/удаление соискателей из Избранного."""
+
     def post(self, request, id):
+        """Добавление соискателя в Избранное."""
         try:
             add_to_selected(user=request.user, applicant_id=id)
         except ObjectAlreadyExistsException as e:
@@ -30,6 +33,7 @@ class SelectedResumeView(views.APIView):
         return Response(status=status.HTTP_201_CREATED)
 
     def delete(self, request, id):
+        """Удаление соискателя из Избранного."""
         try:
             remove_from_selected(user=request.user, applicant_id=id)
         except ObjectDoesNotExist as e:

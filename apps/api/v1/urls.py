@@ -10,6 +10,7 @@ from .vacancies.views import (
     GetRespondsView,
     UpdateRespondStatusView,
 )
+from .students.views import ApplicantViewSet
 
 app_name = "api"
 
@@ -19,8 +20,7 @@ router.register(
     "employers/vacancies", MyVacancyViewset, basename="my_vacancies"
 )
 router.register("vacancies", VacancyViewset, basename="vacancies")
-# тут что-то не так - используется Userviewset
-# router.register("applicants", UserViewSet, basename="applicants")
+router.register("applicants", ApplicantViewSet, basename="applicants")
 router.register("review_status", views.ReviewViewset, basename="review_status")
 
 

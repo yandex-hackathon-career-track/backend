@@ -1,20 +1,31 @@
 from uuid import UUID
 
-from django.db.models import QuerySet, Value
+from django.db.models import QuerySet, Value, Count, Q
 from django.shortcuts import get_object_or_404
 
+from apps.core import constants
 from apps.employers.models import Employer
 from apps.users.models import CustomUser
 
 from .models import Respond, Vacancy
 
 
-def add_all_associated_tables(queryset: QuerySet) -> QuerySet:
-    """Загрузка сопутствующих таблиц."""
+def add_vacancy_associated_tables(queryset: QuerySet) -> QuerySet:
+    """Загрузка таблиц атрибутов для Вакансии."""
     return queryset.select_related("city", "attendance", "occupation")
 
 
-def add_annotation(queryset: QuerySet) -> QuerySet:
+def add_responds_associated_tables(queryset: QuerySet) -> QuerySet:
+    """Загрузка таблиц откликов для Вакансии."""
+    return queryset.prefetch_related(
+        "responds",
+        "responds__applicant",
+        "responds__applicant__contact",
+        "responds__status",
+    )
+
+
+def add_vacancy_statistics(queryset: QuerySet) -> QuerySet:
     """Аннотация статистикой по вакансии."""
     return queryset.annotate(
         views_qty=Value(0),
@@ -24,13 +35,28 @@ def add_annotation(queryset: QuerySet) -> QuerySet:
     )
 
 
+def count_responds_status(status_id):
+    return Count("responds", filter=Q(responds__status_id=status_id))
+
+
+def add_responds_statistics(queryset: QuerySet) -> QuerySet:
+    """Аннотация статистикой по откликам на вакансию."""
+    return queryset.annotate(
+        new=count_responds_status(constants.UNCHOSEN_STATUS_ID),
+        under_review=count_responds_status(constants.UNDER_REVIEW_STATUS_ID),
+        sent_test=count_responds_status(constants.SENT_TEST_STATUS_ID),
+        interview=count_responds_status(constants.INTERVIEW_STATUS_ID),
+        refusal=count_responds_status(constants.REFUSAL_STATUS_ID),
+    )
+
+
 def get_employer_vacancies_by_user(user: CustomUser, action: str) -> QuerySet:
     """Выгрузка всех вакансий пользователя-работодателя."""
     vacancies = user.employer.vacancies
-    if action == "list":
-        return add_annotation(vacancies)
+    if action == "list" and vacancies:
+        return add_vacancy_statistics(vacancies)
     if action == "retrieve":
-        return add_all_associated_tables(queryset=vacancies)
+        return add_vacancy_associated_tables(queryset=vacancies)
     return vacancies
 
 
@@ -41,20 +67,14 @@ def get_published_vacancies() -> QuerySet:
     )
 
 
-def get_vacancy_with_responds(vacancy_id: UUID) -> Vacancy:
+def get_vacancy_with_responds(
+    vacancy_id: UUID, prefetch_required: bool = True
+) -> Vacancy:
     """Поиск вакансии по id с загрузкой откликов и статистикой."""
-    queryset = Vacancy.objects.prefetch_related(
-        "responds",
-        "responds__applicant",
-        "responds__applicant__contact",
-        "responds__status",
-    ).annotate(
-        new=Value(0),
-        under_review=Value(0),
-        sent_test=Value(0),
-        interview=Value(0),
-        refusal=Value(0),
-    )
+    queryset = Vacancy.objects.all()
+    queryset = add_responds_statistics(queryset)
+    if prefetch_required:
+        queryset = add_responds_associated_tables(queryset)
     return get_object_or_404(queryset, id=vacancy_id)
 
 

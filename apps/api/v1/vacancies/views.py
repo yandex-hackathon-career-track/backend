@@ -81,7 +81,8 @@ class UpdateRespondStatusView(views.APIView):
     permission_classes = (IsEmployerCreator,)
 
     @extend_schema(
-        request=ser.EditRespondSerializer, responses=ser.EditRespondSerializer
+        request=ser.EditRespondSerializer,
+        responses=ser.UpdatedRespondSerializer,
     )
     def patch(self, request, pk, respond_id):
         respond = get_respond_by_id(vacancy_id=pk, respond_id=respond_id)
@@ -89,5 +90,6 @@ class UpdateRespondStatusView(views.APIView):
             instance=respond, data=request.data
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        respond = serializer.save()
+        serializer = ser.UpdatedRespondSerializer(instance=respond)
         return Response(serializer.data, status=status.HTTP_200_OK)

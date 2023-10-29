@@ -32,7 +32,7 @@ class ShortEmployerSerializer(serializers.ModelSerializer):
             "email",
             "activity",
             "foundation_year",
-            "employees_qty",
+            "employees_number",
         )
         model = Employer
 

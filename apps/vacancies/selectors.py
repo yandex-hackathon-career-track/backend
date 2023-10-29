@@ -1,10 +1,11 @@
 from uuid import UUID
 
-from django.db.models import QuerySet, Value, Count, Q
+from django.db.models import Count, Q, QuerySet, Value
 from django.shortcuts import get_object_or_404
 
 from apps.core import constants
 from apps.employers.models import Employer
+from apps.students.models import Applicant
 from apps.users.models import CustomUser
 
 from .models import Respond, Vacancy
@@ -28,14 +29,17 @@ def add_responds_associated_tables(queryset: QuerySet) -> QuerySet:
 def add_vacancy_statistics(queryset: QuerySet) -> QuerySet:
     """Аннотация статистикой по вакансии."""
     return queryset.annotate(
-        views_qty=Value(0),
-        responds_qty=Value(0),
-        total_resume_qty=Value(0),
-        chosen_resume_qty=Value(0),
+        views_qty=Value(278),
+        responds_qty=Count("responds"),
+        chosen_resume_qty=Count(
+            "responds",
+            filter=Q(responds__status_id__in=constants.CHOSEN_STATUS_IDS),
+        ),
     )
 
 
 def count_responds_status(status_id):
+    """Вспомогательная функция-счетчик статусов для аннотации."""
     return Count("responds", filter=Q(responds__status_id=status_id))
 
 
@@ -103,5 +107,14 @@ def already_responded(vacancy_id: int, applicant) -> bool:
 
 
 def get_respond_by_id(vacancy_id: UUID, respond_id: int) -> Respond:
-    """Получение отклика по id вакансии и id отклика"""
+    """Получение отклика по id вакансии и id отклика."""
     return get_object_or_404(Respond, id=respond_id, vacancy_id=vacancy_id)
+
+
+def count_resumes_for_vacancy(vacancy: Vacancy) -> int:
+    """Подсчет резюме подходящих под критерии вакансии."""
+    return Applicant.objects.filter(
+        city=vacancy.city,
+        work_format=vacancy.attendance,
+        occupation=vacancy.occupation,
+    ).count()

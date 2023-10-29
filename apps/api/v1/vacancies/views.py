@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, views, decorators, status
 from rest_framework.response import Response
@@ -17,6 +18,7 @@ from ..permissions import (
     IsEmployerCreator,
 )
 from . import serializers as ser
+from .filters import VacancyFilter
 
 
 class MyVacancyViewset(viewsets.ModelViewSet):
@@ -24,6 +26,8 @@ class MyVacancyViewset(viewsets.ModelViewSet):
 
     permission_classes = (IsEmployer,)
     http_method_names = ["get", "post", "patch"]
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = VacancyFilter
 
     def get_serializer_class(self):
         serializer_storage = {

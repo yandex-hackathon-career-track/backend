@@ -8,3 +8,9 @@ SENT_TEST_STATUS_ID = 3
 INTERVIEW_STATUS_ID = 4
 # ID статуса "Не выбран" для откликов и отборов резюме.
 REFUSAL_STATUS_ID = 5
+# Список ID "Отобранных" резюме
+CHOSEN_STATUS_IDS = [
+    UNDER_REVIEW_STATUS_ID,
+    SENT_TEST_STATUS_ID,
+    INTERVIEW_STATUS_ID,
+]

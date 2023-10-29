@@ -62,10 +62,12 @@ class Applicant(BaseModel):
     work_format = models.ManyToManyField(
         WorkFormat,
         verbose_name="Формат работы",
+        related_name="applicants",
     )
     occupation = models.ManyToManyField(
         Occupation,
         verbose_name="Тип занятости",
+        related_name="applicants",
     )
 
     @property

@@ -5,6 +5,7 @@ from apps.students.models import Applicant
 from apps.vacancies.models import Respond, Vacancy
 from apps.vacancies.selectors import (
     already_responded,
+    count_resumes_for_vacancy,
     get_vacancy_with_responds,
     same_titled_vacancy_exists,
 )
@@ -65,7 +66,7 @@ class ListVacancySerializer(BaseVacancySerializer):
 
     views_qty = serializers.IntegerField()
     responds_qty = serializers.IntegerField()
-    total_resume_qty = serializers.IntegerField()
+    total_resume_qty = serializers.SerializerMethodField()
     chosen_resume_qty = serializers.IntegerField()
 
     class Meta(BaseVacancySerializer.Meta):
@@ -75,6 +76,9 @@ class ListVacancySerializer(BaseVacancySerializer):
             "total_resume_qty",
             "chosen_resume_qty",
         )
+
+    def get_total_resume_qty(self, vacancy: Vacancy) -> int:
+        return count_resumes_for_vacancy(vacancy=vacancy)
 
 
 class DetailMyVacancySerializer(BaseVacancySerializer):

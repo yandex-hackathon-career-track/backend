@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, views, status
+from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
@@ -7,15 +8,23 @@ from apps.core.exceptions import ObjectAlreadyExistsException
 from apps.employers.services import add_to_selected, remove_from_selected
 
 from ..permissions import IsEmployer
-from .serializers import EmployerSerializer
+from .serializers import (
+    ReadEmployerSerializer,
+    UpdateEmployerSerializer,
+)
 
 
 class EmployerView(generics.RetrieveUpdateAPIView):
     """Чтение/измение данных профиля Работодателя в ЛК."""
 
-    serializer_class = EmployerSerializer
     permission_classes = (IsEmployer,)
     http_method_names = ["get", "patch"]
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
+
+    def get_serializer_class(self):
+        if self.request.method == "get":
+            return ReadEmployerSerializer
+        return UpdateEmployerSerializer
 
     def get_object(self):
         return self.request.user.employer

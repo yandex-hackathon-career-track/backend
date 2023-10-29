@@ -2,15 +2,17 @@ import uuid
 
 from django.db import models
 
-from apps.attributes.models import ReviewStatus
+from apps.attributes.models import EmployeesNumber, ReviewStatus
 from apps.core.constants import UNCHOSEN_STATUS_ID
 from apps.core.models import BaseModel
 from apps.students.models import Applicant
 from apps.users.models import CustomUser
 
+from .validators import validate_year
+
 
 class Employer(BaseModel):
-    """Профиль работодателя."""
+    """Профиль компании-работодателя."""
 
     id = models.UUIDField(
         "Уникальный id", primary_key=True, default=uuid.uuid4, editable=False
@@ -34,6 +36,25 @@ class Employer(BaseModel):
     email = models.EmailField(verbose_name="Контактный email", blank=True)
     activity = models.CharField(
         verbose_name="Сфера деятельности", max_length=255, blank=True
+    )
+    employees_number = models.ForeignKey(
+        EmployeesNumber,
+        on_delete=models.PROTECT,
+        verbose_name="Численность сотрудников",
+        blank=True,
+        null=True,
+    )
+    foundation_year = models.PositiveIntegerField(
+        verbose_name="Год основания",
+        blank=True,
+        null=True,
+        validators=[validate_year],
+    )
+    file = models.FileField(
+        verbose_name="Документ",
+        upload_to="documents/%Y-%m-%d",
+        blank=True,
+        null=True,
     )
 
     class Meta:

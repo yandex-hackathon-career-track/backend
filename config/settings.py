@@ -142,6 +142,6 @@ DJOSER = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1 * 24 * 5),  # пока пишем код
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(weeks=10),
     "AUTH_HEADER_TYPES": ("JWT",),
 }

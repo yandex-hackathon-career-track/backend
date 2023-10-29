@@ -5,6 +5,7 @@ from .models import (
     City,
     Course,
     Direction,
+    EmployeesNumber,
     ReviewStatus,
     Stack,
     WorkFormat,
@@ -67,4 +68,11 @@ class OccupationAdmin(admin.ModelAdmin):
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = ("id", "email", "telegram")
+    empty_value_display = "-пусто-"
+
+
+@admin.register(EmployeesNumber)
+class EmployeesNumberAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    search_fields = ("name",)
     empty_value_display = "-пусто-"

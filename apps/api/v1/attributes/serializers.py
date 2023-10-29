@@ -6,6 +6,7 @@ from apps.attributes.models import (
     Contact,
     Course,
     Direction,
+    EmployeesNumber,
     Occupation,
     ReviewStatus,
     Stack,
@@ -112,6 +113,14 @@ class OccupationSerializer(serializers.ModelSerializer):
         fields = ("id", "name")
 
 
+class EmployeesNumberSerializer(serializers.ModelSerializer):
+    """Сериализатор для численности сотрудников."""
+
+    class Meta:
+        model = EmployeesNumber
+        fields = ("id", "name")
+
+
 class AttributesSerializer(serializers.Serializer):
     """Сериализация списков всех атрибутов."""
 
@@ -123,3 +132,4 @@ class AttributesSerializer(serializers.Serializer):
     cities = CitySerializer(many=True)
     activity_statuses = ActivityStatusSerializer(many=True)
     review_statuses = ReviewStatusSerializer(many=True)
+    employees_number = EmployeesNumberSerializer(many=True)

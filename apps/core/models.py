@@ -9,3 +9,15 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class NamedModel(models.Model):
+    """Модель с именем для атрибутов."""
+
+    name = models.CharField("Название", max_length=100, unique=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self) -> str:
+        return self.name

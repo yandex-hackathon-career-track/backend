@@ -14,3 +14,17 @@ CHOSEN_STATUS_IDS = [
     SENT_TEST_STATUS_ID,
     INTERVIEW_STATUS_ID,
 ]
+# Минимальный год основания компании
+MIN_FOUNDATION_YEAR = 1900
+# Допустимые типы файлов
+ACCEPTABLE_FILES = [
+    "png",
+    "pdf",
+    "jpeg",
+    "jpg",
+    "msword",
+    "docx",
+    "vnd.openxmlformats-officedocument.wordprocessingml.document",
+]
+# Макс.размер файла - 10 мегабайт
+FILE_SIZE_LIMIT = 10485760

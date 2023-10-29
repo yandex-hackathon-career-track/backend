@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.students.models import Applicant
@@ -157,7 +158,9 @@ class EditRespondSerializer(BaseRespondSerializer):
         read_only_fields = ("applicant",)
 
 
-class NewRespondsStatSerializer(serializers.ModelSerializer):
+class NewRespondsVacancyStatSerializer(serializers.ModelSerializer):
+    """Сериализация данных статистики откликов на Вакансию."""
+
     new = serializers.IntegerField()
     under_review = serializers.IntegerField()
     sent_test = serializers.IntegerField()
@@ -188,11 +191,12 @@ class UpdatedRespondSerializer(BaseRespondSerializer):
         )
         read_only_fields = ("applicant",)
 
-    def get_vacancy_new_stats(self, obj):
+    @extend_schema_field(field=NewRespondsVacancyStatSerializer)
+    def get_vacancy_new_stats(self, obj: Respond):
         vacancy = get_vacancy_with_responds(
             vacancy_id=obj.vacancy.id, prefetch_required=False
         )
-        return NewRespondsStatSerializer(instance=vacancy).data
+        return NewRespondsVacancyStatSerializer(instance=vacancy).data
 
 
 class GetRespondSerializer(BaseRespondSerializer):

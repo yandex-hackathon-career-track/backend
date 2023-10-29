@@ -1,19 +1,6 @@
 from django.db import models
 
-from apps.core.models import BaseModel
-
-
-class Direction(BaseModel):
-    """Направление в сфере деятельности."""
-
-    name = models.CharField("Название", max_length=100)
-
-    class Meta:
-        verbose_name = "Направление"
-        verbose_name_plural = "Направления"
-
-    def __str__(self):
-        return self.name
+from apps.core.models import BaseModel, NamedModel
 
 
 class Contact(BaseModel):
@@ -30,96 +17,77 @@ class Contact(BaseModel):
         return f"{self.email}, {self.telegram}"
 
 
-class City(BaseModel):
-    """Город."""
+class Direction(NamedModel):
+    """Направление в сфере деятельности."""
 
-    name = models.CharField("Название", max_length=100)
+    class Meta:
+        verbose_name = "Направление"
+        verbose_name_plural = "Направления"
+
+
+class City(NamedModel):
+    """Город."""
 
     class Meta:
         verbose_name = "Город"
         verbose_name_plural = "Города"
 
-    def __str__(self):
-        return self.name
 
-
-class Stack(BaseModel):
+class Stack(NamedModel):
     """Стек технологий."""
-
-    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Cтек"
         verbose_name_plural = "Cтек"
 
-    def __str__(self):
-        return self.name
 
-
-class WorkFormat(BaseModel):
+class WorkFormat(NamedModel):
     """Формат работы."""
-
-    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Формат работы"
         verbose_name_plural = "Форматы работы"
 
-    def __str__(self):
-        return self.name
 
-
-class Course(BaseModel):
+class Course(NamedModel):
     """Курсы Практикума."""
-
-    name = models.CharField("Название", max_length=100)
 
     direction = models.ForeignKey(
         Direction, on_delete=models.CASCADE, related_name="course_directions"
     )
 
     class Meta:
-        verbose_name = "Связь курса и направления"
-        verbose_name_plural = "Связи курсов и направлений"
-
-    def __str__(self):
-        return self.name
+        verbose_name = "Курс Практикума"
+        verbose_name_plural = "Курсы Практикума"
 
 
-class ActivityStatus(BaseModel):
+class ActivityStatus(NamedModel):
     """Статус активности."""
-
-    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Статус активности"
         verbose_name_plural = "Статусы активности"
 
-    def __str__(self):
-        return self.name
 
-
-class ReviewStatus(BaseModel):
+class ReviewStatus(NamedModel):
     """Статус рассмотрения кандидата/отклика."""
-
-    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Статус рассмотрения"
         verbose_name_plural = "Статусы рассмотрения"
 
-    def __str__(self):
-        return self.name
 
-
-class Occupation(BaseModel):
+class Occupation(NamedModel):
     """Модель занятости."""
-
-    name = models.CharField("Название", max_length=100)
 
     class Meta:
         verbose_name = "Тип занятости"
         verbose_name_plural = "Типы занятости"
 
-    def __str__(self):
-        return self.name
+
+class EmployeesNumber(NamedModel):
+    """Модель с вариантами численности сотрудников."""
+
+    class Meta:
+        verbose_name = "Численность сотрудников"
+        verbose_name_plural = "Численность сотрудников"

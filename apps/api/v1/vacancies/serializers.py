@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from apps.employers.models import Employer
 from apps.students.models import Applicant
 from apps.vacancies.models import Respond, Vacancy
 from apps.vacancies.selectors import (
@@ -16,7 +17,24 @@ from ..attributes.serializers import (
     ReviewStatusSerializer,
     WorkFormatSerializer,
 )
-from ..employers.serializers import EmployerSerializer
+
+
+class ShortEmployerSerializer(serializers.ModelSerializer):
+    """Сериализатор данных Работодателя для вакансии."""
+
+    class Meta:
+        fields = (
+            "id",
+            "name",
+            "about",
+            "website",
+            "phone",
+            "email",
+            "activity",
+            "foundation_year",
+            "employees_number",
+        )
+        model = Employer
 
 
 class BaseVacancySerializer(serializers.ModelSerializer):
@@ -103,7 +121,7 @@ class DetailMyVacancySerializer(BaseVacancySerializer):
 class DetailVacancySerializer(BaseVacancySerializer):
     """Сериализация для 1 вакансии работодателя (для просмотра)."""
 
-    creator = EmployerSerializer()
+    creator = ShortEmployerSerializer()
     attendance = WorkFormatSerializer()
     occupation = OccupationSerializer()
     city = CitySerializer()

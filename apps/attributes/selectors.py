@@ -3,6 +3,7 @@ from .models import (
     City,
     Course,
     Direction,
+    EmployeesNumber,
     ReviewStatus,
     Stack,
     WorkFormat,
@@ -20,4 +21,5 @@ def get_atrributes() -> dict:
         "cities": City.objects.all(),
         "activity_statuses": ActivityStatus.objects.all(),
         "review_statuses": ReviewStatus.objects.all(),
+        "employees_number": EmployeesNumber.objects.all(),
     }

@@ -8,6 +8,7 @@ from apps.attributes.models import (
     Direction,
     City,
     Course,
+    EmployeesNumber,
     Stack,
     ReviewStatus,
     WorkFormat,
@@ -28,6 +29,7 @@ class Command(BaseCommand):
             ("courses.csv", Course),
             ("activity_status.csv", ActivityStatus),
             ("review_status.csv", ReviewStatus),
+            ("employees_number.csv", EmployeesNumber),
         )
         for file, model in FILE_HANDLE:
             self.stdout.write(f'{"---"*40}\nОткрываем файл {file}')

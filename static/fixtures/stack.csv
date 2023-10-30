@@ -1,0 +1,209 @@
+id;name
+1;Гайдлайны iOS
+2;Figma
+3;Гайдлайны Android
+4;Анализ ЦА
+5;Гипотезы
+6;UX-копирайтинг
+7;UX-тестирование
+8;Конкурентный анализ
+9;JTBD и User Stories
+10;Анимация
+11;Вайрфреймы
+12;UI-Kit
+13;Аудит юзабилити
+14;Adobe Photoshop
+15;Adobe Illustrator
+16;Вёрстка
+17;Брендбук
+18;Анализ аудитории
+19;Презентации
+20;Типографика
+21;Tilda
+22;HTML
+23;CSS
+24;Гайдлайны iOS и Android
+25;Дизайн-системы
+26;Прототипирование
+27;Проектирование
+28;Метрики
+29;Adobe After Effects
+30;Adobe Premiere Pro
+31;Cinema 4D
+32;Монтаж
+33;Рендеринг
+34;Flexbox
+35;Git
+36;BASH
+37;JavaScript
+38;TypeScript
+39;React
+40;Redux
+41;Grid Layout
+42;DOM
+43;Webpack
+44;React Router
+45;ООП
+46;Node.js
+47;Express
+48;MongoDB
+49;PostgreSQL
+50;Nest.js
+51;Docker
+52;Python
+53;Django
+54;GitHub
+55;SQL
+56;Nginx
+57;Gunicorn
+58;Docker Hub
+59;Flask
+60;FastAPI
+61;Scrapy
+62;Selenium
+63;SQLAlchemy
+64;Java Core
+65;Структуры данных
+66;Алгоритмы
+67;Базы данных и SQL
+68;Unit-тестирование
+69;Spring
+70;Spring Boot
+71;Maven
+72;Mock-тестирование
+73;STL
+74;Дебагинг
+75;Юнит-тестирование
+76;UML-диаграммы
+77;RAII
+78;CMake
+79;VS Code
+80;Библиотеки
+81;Move-семантика
+82;Архитектура
+83;Паттерны
+84;Swift
+85;UIKit
+86;AutoLayout
+87;UICollectionView
+88;MVC
+89;MVVM
+90;Сlean architecture
+91;CocoaPods
+92;REST
+93;GCD
+94;UserDefaults
+95;Keychain
+96;SQLite
+97;CoreData
+98;Unit Testing
+99;UI Testing
+100;Java
+101;Kotlin
+102;Gradle
+103;Android SDK
+104;Xml
+105;MVP
+106;Koin
+107;OkHttp
+108;Retrofit
+109;Coroutines
+110;RxJava
+111;Content Provider
+112;Room
+113;JVM Tests
+114;Go
+115;REST API
+116;HTTP
+117;Swagger
+118;JSON
+119;JWT
+120;ORM
+121;CI/CD
+122;Docker Compose
+123;YAML
+124;Linux
+125;DevTools
+126;Charles
+127;Cygwin/Terminal
+128;YouTrack
+129;Postman
+130;JSON/SOAP
+131;XML/XSD
+132;Apidoc/Swagger
+133;Android Studio
+134;Pytest
+135;TMS
+136;PyCharm
+137;Jupyter Notebook
+138;Pandas
+139;Keras
+140;Catboost
+141;Scikit-learn
+142;Tableau
+143;А/В-тесты
+144;UML
+145;BPMN
+146;User / Job Story
+147;ER-диаграмма
+148;DFD
+149;User Story Map
+150;JSON / XML
+151;BDD
+152;Personas
+153;User Journey Map
+154;GUI
+155;REST / SOAP API
+156;Miro
+157;Google Sheets
+158;Excel
+159;Интервью
+160;PowerPoint
+161;Drawio
+162;GanttPRO
+163;Kaiten
+164;Kanban
+165;Waterfall
+166;Agile
+167;Scrum
+168;Пачка
+169;Управление проектами
+170;Анализ рынка
+171;Юнит-экономика
+172;Product growth
+173;Стратегия продукта
+174;Воронка AARRR
+175;Портфель продуктов
+176;Google Таблицы
+177;Яндекс Директ
+178;Wordstat
+179;Яндекс Метрика
+180;Google Analytics
+181;VK Реклама
+182;Telegram Ads
+183;Tilda Publishing
+184;Яндекс Вебмастер
+185;Sendsay
+186;Google Ads
+187;Google Analytics 4
+188;Supa
+189;Looker 
+190;Studio
+191;Директ Коммандер
+192;Яндекс Бизнес
+193;Google Tag Manager
+194;Google Мой бизнес
+195;Google Docs
+196;ВКонтакте
+197;Trello
+198;Asana
+199;Jira
+200;SEO
+201;SMM
+202;A/B-тестирование
+203;CJM
+204;CRM
+205;Email-маркетинг
+206;Event-маркетинг
+207;Работа с гипотезами
+208;Управление проектом

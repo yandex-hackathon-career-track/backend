@@ -28,7 +28,6 @@ password: password-123
 http://130.193.38.88/api/schema/swagger/#/
 
 ### Тестирование бэкенда:
-Покрытие тестами - 86%
 ![image](https://github.com/yandex-hackathon-career-track/backend/blob/main/static/github/coverage.png)
 
 ### Описание возможностей

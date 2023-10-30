@@ -14,8 +14,8 @@ http://130.193.38.88/
 ![image](https://img.shields.io/badge/Pandas-2C2D72?style=for-the-badge&logo=pandas&logoColor=white)
 
 ### Доступ в админ-панель:
-```
 http://130.193.38.88/admin 
+```
 login: admin@admin.ru
 password: password-123
 ```
@@ -55,9 +55,31 @@ http://130.193.38.88/api/schema/swagger/#/
 
 ### Запуск проекта
 ## Переменные окружения
+Файл .env хранится в корневой папке проекта; пример заполнения в .env.example.
 
-## С установленным Docker
- 
+## Запуск с установленным Docker
+Копировать проект в папку целиком (для запуска контейнеров достаточно .env в корне проекта и папки /infra)
+```
+git clone git@github.com:yandex-hackathon-career-track/backend.git
+```
+Перейти в папку infra и запустить сборку контейнеров
+```
+cd backend/infra
+docker compose up -d
+```
+Добавить миграции и собрать статику
+```
+docker exec -it career_back python manage.py migrate
+docker exec -it career_back python manage.py collectstatic --noinput
+```
+Сайт доступен по адресу http://127.0.0.1/
+
+## Наполнение проекта фикстурами
+Добавить модели атрибутов (статичные модели для фильтров и атрибутов соискателей)
+```
+docker exec -it career_back python manage.py add_attributes
+```
 
 ### Разработчики:
-TBD
+[Руслан Атаров](https://github.com/ratarov)
+[Филипп Пыхонин](https://github.com/caveinfix)

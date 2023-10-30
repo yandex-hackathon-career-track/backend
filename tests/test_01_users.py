@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 import pytest
 
-from . import utils
+from .utils import employer_utils as utils
 
 
 @pytest.mark.django_db()

@@ -37,6 +37,9 @@ class IsEmployer(BasePermission):
             and request.user.role == Role.EMPLOYER
         )
 
+    def has_object_permission(self, request, view, obj):
+        return obj.creator == request.user.employer
+
 
 class IsApplicant(BasePermission):
     def has_permission(self, request, view):

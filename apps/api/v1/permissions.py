@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
+from apps.students.models import Applicant
 from apps.users.models import Role
 from apps.vacancies.models import Vacancy
 from apps.vacancies.selectors import user_is_vacancy_creator
@@ -38,7 +39,10 @@ class IsEmployer(BasePermission):
         )
 
     def has_object_permission(self, request, view, obj):
-        return obj.creator == request.user.employer
+        """Доступ к соискателям на чтение; к вакансиям - только у автора."""
+        return (
+            isinstance(obj, Applicant) or obj.creator == request.user.employer
+        )
 
 
 class IsApplicant(BasePermission):

@@ -81,5 +81,5 @@ docker exec -it career_back python manage.py add_attributes
 ```
 
 ### Разработчики:
-[Руслан Атаров](https://github.com/ratarov)
+[Руслан Атаров](https://github.com/ratarov) <br>
 [Филипп Пыхонин](https://github.com/caveinfix)

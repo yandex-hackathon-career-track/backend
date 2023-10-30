@@ -32,9 +32,6 @@ class Vacancy(BaseModel):
     city = models.ForeignKey(
         City, on_delete=models.PROTECT, verbose_name="Город"
     )
-    # stack = models.ManyToManyField(
-    #     Stack, through="VacancyStack", verbose_name="Стек инструментов"
-    # )
 
     class Meta:
         verbose_name = "Вакансия"

@@ -11,6 +11,7 @@ http://130.193.38.88/
 ![image](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
 ![image](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
 ![image](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+![image](https://img.shields.io/badge/Pytest-86D46B?style=for-the-badge&logo=redux%20saga&logoColor=999999)
 ![image](https://img.shields.io/badge/Pandas-2C2D72?style=for-the-badge&logo=pandas&logoColor=white)
 
 ### Доступ в админ-панель:
@@ -53,11 +54,11 @@ http://130.193.38.88/api/schema/swagger/#/
 | POST   |/api/v1/vacancies/{id}/respond/               | Откликнуться на вакансию (для Соискателей) |
 
 
-### Запуск проекта
-## Переменные окружения
+## Запуск проекта
+### Переменные окружения
 Файл .env хранится в корневой папке проекта; пример заполнения в .env.example.
 
-## Запуск с установленным Docker
+### Запуск с установленным Docker
 Копировать проект в папку целиком (для запуска контейнеров достаточно .env в корне проекта и папки /infra)
 ```
 git clone git@github.com:yandex-hackathon-career-track/backend.git
@@ -74,12 +75,12 @@ docker exec -it career_back python manage.py collectstatic --noinput
 ```
 Сайт доступен по адресу http://127.0.0.1/
 
-## Наполнение проекта фикстурами
+### Наполнение проекта фикстурами
 Добавить модели атрибутов (статичные модели для фильтров и атрибутов соискателей)
 ```
 docker exec -it career_back python manage.py add_attributes
 ```
 
-### Разработчики:
+## Разработчики:
 [Руслан Атаров](https://github.com/ratarov) <br>
 [Филипп Пыхонин](https://github.com/caveinfix)

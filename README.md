@@ -1,7 +1,10 @@
-# YANDEX HACKATHON: Внутренний сервис для найма в Карьерном трекере
+# YANDEX HACKATHON: Внутренний сервис для найма в Карьерном трекере. SEVEN-ELEVEN (команда 11).
 http://130.193.38.88/
 
-##  Описание BACKEND. 
+##  FRONTEND: 
+https://github.com/yandex-hackathon-career-track/frontend
+
+##  BACKEND: 
 ### Инструменты:
 ![image](https://img.shields.io/badge/Python%203.11-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
 ![image](https://img.shields.io/badge/Django%204.2-092E20?style=for-the-badge&logo=django&logoColor=green)
@@ -83,7 +86,11 @@ docker exec -it career_back python manage.py collectstatic --noinput
 ```
 docker exec -it career_back python manage.py add_attributes
 ```
+Фикстуры 1100 студентов для проверки работы сайта
+```
+docker exec -it career_back python manage.py loaddata static/fixtures/applicants.json
+```
 
-## Разработчики:
+## Backend-разработчики:
 [Руслан Атаров](https://github.com/ratarov) <br>
 [Филипп Пыхонин](https://github.com/caveinfix)

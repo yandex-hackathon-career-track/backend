@@ -1,8 +1,9 @@
-import tempfile
+# import tempfile
 from datetime import date
 
 from django.http import HttpResponse
-from PIL import Image
+
+# from PIL import Image
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
@@ -24,7 +25,10 @@ def format_experience(total_experience):
             return f"{number} {plural2}"
 
     if years > 0 and months > 0:
-        return f"{pluralize(years, 'год', 'года', 'лет')} и {pluralize(months, 'месяц', 'месяца', 'месяцев')}"
+        return (
+            f"{pluralize(years, 'год', 'года', 'лет')} и "
+            f"{pluralize(months, 'месяц', 'месяца', 'месяцев')}"
+        )
     elif years > 0:
         return pluralize(years, "год", "года", "лет")
     elif months > 0:
@@ -80,7 +84,8 @@ def generate_pdf(applicant, applicant_serializer):
     filename = f"applicant_{applicant.id}_resume.pdf"
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
     c = canvas.Canvas(response)
-    x, y = 100, 750
+    # x, y = 100, 750
+    y = 750
 
     data = applicant_serializer.data
 
@@ -90,7 +95,7 @@ def generate_pdf(applicant, applicant_serializer):
         c.drawString(10, y, text)
         y -= 20
 
-    x = 250
+    # x = 250
 
     draw_text(f"{data['first_name']} {data['last_name']}", size=18)
     y -= 7
@@ -104,7 +109,10 @@ def generate_pdf(applicant, applicant_serializer):
     draw_text("Должность:", size=12)
     for job_item in data["jobs"]:
         draw_text(
-            f"{job_item['name']} ({format_experience(job_item['experience'])})",
+            (
+                f"{job_item['name']} "
+                f"({format_experience(job_item['experience'])})"
+            ),
             size=12,
         )
     draw_text("Курсы:", size=12)
@@ -137,25 +145,28 @@ def generate_pdf(applicant, applicant_serializer):
         draw_text(f"Telegram: {contacts['telegram']}", size=12)
     if "email" in contacts:
         draw_text(f"Email: {contacts['email']}", size=12)
-    x = 100
+    # x = 100
 
-    if applicant.photo:
-        photo = Image.open(applicant.photo.path)
-        desired_width, desired_height = 80, 100
-        photo = photo.resize((desired_width, desired_height), Image.LANCZOS)
+    # убрал, так как фото не используются; дефолтного файла нет на сервере
+    # if applicant.photo:
+    #     photo = Image.open(applicant.photo.path)
+    #     desired_width, desired_height = 80, 100
+    #     photo = photo.resize((desired_width, desired_height), Image.LANCZOS)
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
-            photo.save(temp_file, "PNG")
-            temp_file.seek(0)
-            photo_path = temp_file.name
+    #    with tempfile.NamedTemporaryFile(
+    #        delete=False, suffix=".png"
+    #    ) as temp_file:
+    #         photo.save(temp_file, "PNG")
+    #         temp_file.seek(0)
+    #         photo_path = temp_file.name
 
-        c.drawImage(
-            photo_path,
-            400,
-            760 - desired_height,
-            width=desired_width,
-            height=desired_height,
-        )
+    #     c.drawImage(
+    #         photo_path,
+    #         400,
+    #         760 - desired_height,
+    #         width=desired_width,
+    #         height=desired_height,
+    #     )
 
     c.showPage()
     c.save()

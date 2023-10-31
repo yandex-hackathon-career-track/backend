@@ -40,5 +40,4 @@ class ApplicantViewSet(viewsets.ReadOnlyModelViewSet):
         applicant = self.get_object()
         applicant_serializer = ApplicantSerializer(applicant)
         response = generate_pdf(applicant, applicant_serializer)
-
         return response

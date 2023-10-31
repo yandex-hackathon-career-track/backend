@@ -138,22 +138,24 @@ def generate_pdf(applicant, applicant_serializer):
     if "email" in contacts:
         draw_text(f"Email: {contacts['email']}", size=12)
     x = 100
-    photo = Image.open(applicant.photo.path)
-    desired_width, desired_height = 80, 100
-    photo = photo.resize((desired_width, desired_height), Image.LANCZOS)
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
-        photo.save(temp_file, "PNG")
-        temp_file.seek(0)
-        photo_path = temp_file.name
+    if applicant.photo:
+        photo = Image.open(applicant.photo.path)
+        desired_width, desired_height = 80, 100
+        photo = photo.resize((desired_width, desired_height), Image.LANCZOS)
 
-    c.drawImage(
-        photo_path,
-        400,
-        760 - desired_height,
-        width=desired_width,
-        height=desired_height,
-    )
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
+            photo.save(temp_file, "PNG")
+            temp_file.seek(0)
+            photo_path = temp_file.name
+
+        c.drawImage(
+            photo_path,
+            400,
+            760 - desired_height,
+            width=desired_width,
+            height=desired_height,
+        )
 
     c.showPage()
     c.save()

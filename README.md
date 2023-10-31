@@ -32,8 +32,11 @@ password: password-123
 ```
 
 ### API-документация:
-http://130.193.38.88/api/schema/swagger/#/
-
+http://130.193.38.88/api/schema/swagger/#/ <br>
+```
+Авторизация через headers:
+Authorization: JWT <access-token>
+```
 ### Тестирование бэкенда:
 ![image](https://github.com/yandex-hackathon-career-track/backend/blob/main/static/github/coverage.png)
 

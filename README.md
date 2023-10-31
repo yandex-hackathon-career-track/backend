@@ -5,6 +5,9 @@ http://130.193.38.88/ <br>
 login: testuser@mail.ru
 password: password-123
 ```
+## Архивы и фото
+https://github.com/yandex-hackathon-career-track/backend/tree/main/archives
+
 ##  FRONTEND: 
 https://github.com/yandex-hackathon-career-track/frontend
 

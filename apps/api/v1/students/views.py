@@ -3,14 +3,15 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 
 from apps.api.v1.permissions import IsEmployer
-from apps.students.selectors import get_all_applicants
 from apps.api.v1.students.serializers import (
     ApplicantSerializer,
     ApplicantsListSerializer,
 )
-from .filters import ApplicantFilter
-
+from apps.core.utils import generate_pdf
+from apps.students.selectors import get_all_applicants
 from apps.students.services import render_response_with_report
+
+from .filters import ApplicantFilter
 
 
 class ApplicantViewSet(viewsets.ReadOnlyModelViewSet):
@@ -26,10 +27,20 @@ class ApplicantViewSet(viewsets.ReadOnlyModelViewSet):
         return ApplicantSerializer
 
     def get_queryset(self):
-        return get_all_applicants(user=self.request.user)
+        queryset = get_all_applicants(user=self.request.user)
+        if self.action == "download_report":
+            return queryset.filter(is_selected=True)
+        return queryset
 
     @action(detail=False)
     def download_report(self, request):
         """Скачать список отобранных соискателей."""
         applicants = self.filter_queryset(self.get_queryset())
         return render_response_with_report(applicants=applicants)
+
+    @action(detail=True)
+    def generate_pdf(self, request, pk=None):
+        applicant = self.get_object()
+        applicant_serializer = ApplicantSerializer(applicant)
+        response = generate_pdf(applicant, applicant_serializer)
+        return response

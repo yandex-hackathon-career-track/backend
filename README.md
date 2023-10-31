@@ -1,6 +1,10 @@
 # YANDEX HACKATHON: Внутренний сервис для найма в Карьерном трекере. SEVEN-ELEVEN (команда 11).
-http://130.193.38.88/
-
+http://130.193.38.88/ <br>
+данные для пробного входа на сайт
+```
+login: testuser@mail.ru
+password: password-123
+```
 ##  FRONTEND: 
 https://github.com/yandex-hackathon-career-track/frontend
 
@@ -20,7 +24,7 @@ https://github.com/yandex-hackathon-career-track/frontend
 ### Доступ в админ-панель:
 http://130.193.38.88/admin 
 ```
-login: admin@admin.ru
+login: admin@admin.admin
 password: password-123
 ```
 
@@ -35,6 +39,7 @@ http://130.193.38.88/api/schema/swagger/#/
 |:-------|----------------------------------------------|--------------------------------------------------------------------------|
 | GET    |/api/v1/applicants/                           | Список соискателей с возможностью фильтрации по атрибутам |
 | GET    |/api/v1/applicants/{id}/                      | Подробная карточка соискателя  |
+| GET    |/api/v1/applicants/{id}/generate_pdf/         | Скачать резюме в pdf  |
 | POST   |/api/v1/applicants/{id}/selected/             | Добавление соискателя в избранное  |
 | DELETE |/api/v1/applicants/{id}/selected/             | Удаление соискателя из избранного  |
 | GET    |/api/v1/applicants/download_report/           | Скачивание отчета в excel  |
@@ -82,15 +87,27 @@ docker exec -it career_back python manage.py collectstatic --noinput
 Сайт доступен по адресу http://127.0.0.1/
 
 ### Наполнение проекта фикстурами
-Добавить модели атрибутов (статичные модели для фильтров и атрибутов соискателей)
+Фикстуры всех атрибутов + 50 студентов + 1 админ (admin@admin.admin / password-123) для проверки работы сайта
+```
+docker exec -it career_back python manage.py loaddata static/fixtures/data.json
+```
+
+Добавить только модели атрибутов (статичные модели для фильтров и атрибутов соискателей)
 ```
 docker exec -it career_back python manage.py add_attributes
 ```
-Фикстуры 1100 студентов для проверки работы сайта
-```
-docker exec -it career_back python manage.py loaddata static/fixtures/applicants.json
-```
 
-## Backend-разработчики:
+## Команда
+### Project Manger
+Марина Нюнякина
+### Backend:
 [Руслан Атаров](https://github.com/ratarov) <br>
-[Филипп Пыхонин](https://github.com/caveinfix)
+[Филипп Пыхонин](https://github.com/caveinfix)<br>
+### Design:
+[Решетняк Анастасия](https://www.behance.net/015d9f71)<br>
+[Евгения Постникова](https://www.behance.net/eugi_eugenia)<br>
+Вера Карулина
+### Frontend:
+[Влад Мещеринов](https://github.com/beardy-raccoon) <br>
+[Артем Никифоров](https://github.com/Art-Frich) <br>
+[Любимов Ярослав](https://github.com/Yanseses)

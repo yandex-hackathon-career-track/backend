@@ -26,7 +26,10 @@ class ApplicantViewSet(viewsets.ReadOnlyModelViewSet):
         return ApplicantSerializer
 
     def get_queryset(self):
-        return get_all_applicants(user=self.request.user)
+        queryset = get_all_applicants(user=self.request.user)
+        if self.action == "download_report":
+            return queryset.filter(is_selected=True)
+        return queryset
 
     @action(detail=False)
     def download_report(self, request):

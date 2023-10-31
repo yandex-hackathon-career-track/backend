@@ -2,7 +2,6 @@ from datetime import date, timedelta
 
 import django_filters
 from django.db.models import Min, OuterRef, Subquery
-from django_filters import ChoiceFilter
 from django_filters.filters import NumberFilter
 
 from apps.attributes.models import (
@@ -79,17 +78,6 @@ class ApplicantFilter(django_filters.FilterSet):
     )
     is_selected = django_filters.BooleanFilter()
 
-    sort_by = ChoiceFilter(
-        field_name="sort_by",
-        label="Сортировка",
-        choices=(
-            ("updated_at", "по дате обновления"),
-            ("status", "по статусу"),
-            ("occupation", "по типу занятости"),
-        ),
-        method="filter_sort_by",
-    )
-
     def filter_start_date_experience_min(self, queryset, name, value):
         """
         Фильтрует соискателей по минимальному опыту работы (в годах).
@@ -102,10 +90,13 @@ class ApplicantFilter(django_filters.FilterSet):
         )
 
         queryset = queryset.annotate(
-            min_start_date=Subquery(job_experience_subquery.values("min_start_date"))
+            min_start_date=Subquery(
+                job_experience_subquery.values("min_start_date")
+            )
         )
         queryset = queryset.filter(
-            min_start_date__lte=date.today() - timedelta(days=365 * years_of_experience)
+            min_start_date__lte=date.today()
+            - timedelta(days=365 * years_of_experience)
         )
         return queryset
 
@@ -121,7 +112,7 @@ class ApplicantFilter(django_filters.FilterSet):
             "is_selected",
         ]
         order_by = [
-            ("-graduation_date", "Сортировка по дате окончания обучения"),
-            ("-created_at", "Сортировка по дате создания"),
-            ("-updated_at", "Сортировка по дате обновления"),
+            ("-graduation_date", "сортировка по дате окончания обучения"),
+            ("-created_at", "сортировка по дате создания"),
+            ("-updated_at", "сортировка по дате обновления"),
         ]

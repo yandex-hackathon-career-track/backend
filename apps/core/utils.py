@@ -107,7 +107,7 @@ def generate_pdf(applicant, applicant_serializer):
     )
 
     y -= 10
-    draw_text("Должность:", size=17)
+    draw_text("Должность", size=17)
     for job_item in data["jobs"]:
         draw_text(
             f"{job_item['name']} - {format_experience(job_item['experience'])}",
@@ -115,7 +115,7 @@ def generate_pdf(applicant, applicant_serializer):
         )
     y -= 10
 
-    draw_text("Курсы:", size=17)
+    draw_text("Курсы", size=17)
     for course in data["applicant_courses"]:
         draw_text(
             f"{course['course']},  дата окончания: {course['graduation_date']}",
@@ -123,12 +123,12 @@ def generate_pdf(applicant, applicant_serializer):
         )
     y -= 10
 
-    draw_text("Образование:", size=17)
+    draw_text("Образование", size=17)
     for education in data["educations"]:
         draw_text(f"{education['name']}", size=12)
     y -= 10
 
-    draw_text("Навыки:", size=17)
+    draw_text("Навыки", size=17)
     stack_items = [stack_item["name"] for stack_item in data.get("stack", [])]
     stack_string = ", ".join(stack_items)
     draw_text(f"Стек: {stack_string}", size=12)

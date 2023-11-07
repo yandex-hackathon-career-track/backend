@@ -97,16 +97,15 @@ def generate_pdf(applicant, applicant_serializer):
         c.drawString(30, y, text)
         y -= 20
 
-    # Заголовок с именем и фамилией
     draw_text(f"{data['first_name']} {data['last_name']}", size=23)
     y -= 5
-    # Направление
+
     draw_text(data["direction"]["name"], size=14)
-    # Стаж и образование
+
     draw_text(
         f"Опыт работы - {format_experience(data['total_experience'])}", size=14
     )
-    # Должности
+
     y -= 10
     draw_text("Должность:", size=17)
     for job_item in data["jobs"]:
@@ -115,7 +114,7 @@ def generate_pdf(applicant, applicant_serializer):
             size=12,
         )
     y -= 10
-    # Курсы
+
     draw_text("Курсы:", size=17)
     for course in data["applicant_courses"]:
         draw_text(
@@ -123,18 +122,18 @@ def generate_pdf(applicant, applicant_serializer):
             size=12,
         )
     y -= 10
-    # Образование
+
     draw_text("Образование:", size=17)
     for education in data["educations"]:
         draw_text(f"{education['name']}", size=12)
     y -= 10
+
     draw_text("Навыки:", size=17)
-    # Стек технологий
     stack_items = [stack_item["name"] for stack_item in data.get("stack", [])]
     stack_string = ", ".join(stack_items)
     draw_text(f"Стек: {stack_string}", size=12)
     y -= 10
-    # Формат работы и город
+
     draw_text("Формат работы и город", size=17)
     for work_format in data["work_format"]:
         draw_text(f"Формат работы: {work_format['name']}", size=12)
@@ -142,14 +141,14 @@ def generate_pdf(applicant, applicant_serializer):
         draw_text(f"Занятость: {occupation['name']}", size=12)
     draw_text(f"Город: {data['city']}", size=12)
     y -= 10
-    # Портфолио и сертификаты
+
     draw_text("Портфолио и сертификаты", size=17)
     for portfolio_link in data["portfolio_links"]:
         draw_text(
             f"{portfolio_link['name']}, {portfolio_link['link']}", size=12
         )
     y -= 10
-    # Контакты
+
     draw_text("Контакты", size=17)
     contacts = data.get("contact", {})
     if "telegram" in contacts:

@@ -33,6 +33,10 @@ password: password-123
 
 ### API-документация:
 https://www.career-tracker.ru/api/schema/swagger/#/
+```
+Авторизация через headers:
+Authorization: JWT <access-token>
+```
 
 ### Тестирование бэкенда:
 ![image](https://github.com/yandex-hackathon-career-track/backend/blob/main/static/github/coverage.png)

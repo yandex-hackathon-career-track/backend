@@ -130,6 +130,7 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Проект разработан в рамках Яндекс-Хакатона: Карьерный трекер. Резюме",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "SCHEMA_PATH_PREFIX": "/api/v1/",
     "SWAGGER_UI_DIST": "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.3",
 }
 

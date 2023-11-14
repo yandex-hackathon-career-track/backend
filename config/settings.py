@@ -130,6 +130,7 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Проект разработан в рамках Яндекс-Хакатона: Карьерный трекер. Резюме",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.3",
 }
 
 DJOSER = {

@@ -35,14 +35,15 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          password: ${{ secrets.PASSWORD }}
           script: |
             cd career_project/infra/
-            sudo docker compose stop
+            sudo docker-compose stop
             sudo docker rm career_back         
             sudo docker rm nginx
+            sudo docker volume rm static_value
             sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/career_back
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/career_back:latest
-            sudo docker compose up -d --build
+            sudo docker-compose up -d --build
             sudo docker exec -i career_back python manage.py migrate
             sudo docker exec -i career_back python manage.py collectstatic --noinput

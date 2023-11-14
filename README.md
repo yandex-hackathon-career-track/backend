@@ -1,5 +1,5 @@
 # YANDEX HACKATHON: Внутренний сервис для найма в Карьерном трекере. SEVEN-ELEVEN (команда 11).
-http://130.193.38.88/ <br>
+https://www.career-tracker.ru/ <br>
 данные для пробного входа на сайт
 ```
 login: testuser@mail.ru
@@ -25,14 +25,14 @@ https://github.com/yandex-hackathon-career-track/frontend
 ![image](https://img.shields.io/badge/Pandas-2C2D72?style=for-the-badge&logo=pandas&logoColor=white)
 
 ### Доступ в админ-панель:
-http://130.193.38.88/admin 
+https://www.career-tracker.ru/admin 
 ```
 login: admin@admin.admin
 password: password-123
 ```
 
 ### API-документация:
-http://130.193.38.88/api/schema/swagger/#/
+https://www.career-tracker.ru/api/schema/swagger/#/
 
 ### Тестирование бэкенда:
 ![image](https://github.com/yandex-hackathon-career-track/backend/blob/main/static/github/coverage.png)

@@ -1,9 +1,9 @@
-import tempfile
+# import tempfile
 from datetime import date
 
 from django.http import HttpResponse
 
-from PIL import Image
+# from PIL import Image
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
@@ -88,7 +88,8 @@ def generate_pdf(applicant, applicant_serializer):
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
 
     c = canvas.Canvas(response)
-    x, y = 120, 800
+    y = 800
+    # x, y = 120, 800
     data = applicant_serializer.data
 
     def draw_text(text, size=12):
@@ -103,14 +104,14 @@ def generate_pdf(applicant, applicant_serializer):
     draw_text(data["direction"]["name"], size=14)
 
     draw_text(
-        f"Опыт работы - {format_experience(data['total_experience'])}", size=14
+        f"Опыт работы- {format_experience(data['total_experience'])}", size=14
     )
 
     y -= 10
     draw_text("Должность", size=17)
     for job_item in data["jobs"]:
         draw_text(
-            f"{job_item['name']} - {format_experience(job_item['experience'])}",
+            f"{job_item['name']}: {format_experience(job_item['experience'])}",
             size=12,
         )
     y -= 10
@@ -118,7 +119,7 @@ def generate_pdf(applicant, applicant_serializer):
     draw_text("Курсы", size=17)
     for course in data["applicant_courses"]:
         draw_text(
-            f"{course['course']},  дата окончания: {course['graduation_date']}",
+            f"{course['course']}, дата окончания: {course['graduation_date']}",
             size=12,
         )
     y -= 10
@@ -155,33 +156,33 @@ def generate_pdf(applicant, applicant_serializer):
         draw_text(f"Telegram: {contacts['telegram']}", size=12)
     if "email" in contacts:
         draw_text(f"Email: {contacts['email']}", size=12)
-    if applicant.photo:
-        photo = Image.open(applicant.photo.path)
-        desired_width, desired_height = 150, 200
-        x, y = 420, 820
-        width, height = photo.size
-        scale = min(desired_width / width, desired_height / height)
-        new_width = int(width * scale)
-        new_height = int(height * scale)
-        photo = photo.resize((new_width, new_height), Image.LANCZOS)
+    # if applicant.photo:
+    #     photo = Image.open(applicant.photo.path)
+    #     desired_width, desired_height = 150, 200
+    #     x, y = 420, 820
+    #     width, height = photo.size
+    #     scale = min(desired_width / width, desired_height / height)
+    #     new_width = int(width * scale)
+    #     new_height = int(height * scale)
+    #     photo = photo.resize((new_width, new_height), Image.LANCZOS)
 
-        x += (desired_width - new_width) / 2
-        y -= desired_height
+    #     x += (desired_width - new_width) / 2
+    #     y -= desired_height
 
-        with tempfile.NamedTemporaryFile(
-            delete=False, suffix=".png"
-        ) as temp_file:
-            photo.save(temp_file, "PNG")
-            temp_file.seek(0)
-            photo_path = temp_file.name
+    #     with tempfile.NamedTemporaryFile(
+    #         delete=False, suffix=".png"
+    #     ) as temp_file:
+    #         photo.save(temp_file, "PNG")
+    #         temp_file.seek(0)
+    #         photo_path = temp_file.name
 
-        c.drawImage(
-            photo_path,
-            x,
-            y,
-            width=new_width,
-            height=new_height,
-        )
+    #     c.drawImage(
+    #         photo_path,
+    #         x,
+    #         y,
+    #         width=new_width,
+    #         height=new_height,
+    #     )
     c.showPage()
     c.save()
 
